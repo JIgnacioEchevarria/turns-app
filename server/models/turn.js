@@ -19,7 +19,7 @@ export class TurnModel {
 
       turns.rows.forEach(turn => {
         // Actualiza el objeto con la nueva fecha y hora en la zona horaria deseada
-        turn.date_time = dayjs(turn.date_time).format('YYYY-MM-DD HH:mm:ss')
+        turn.date_time = dayjs(turn.date_time).format('YYYY-MM-DD HH:mm:ss-03')
         turn.date = dayjs(turn.date_time).format('YYYY-MM-DD')
         turn.time = dayjs(turn.date_time).format('HH:mm')
       })
@@ -52,7 +52,7 @@ export class TurnModel {
 
       const turnsWithLocalTime = turns.rows.map(turn => ({
         ...turn,
-        date_time: dayjs(turn.date_time).format('YYYY-MM-DD HH:mm:ss'),
+        date_time: dayjs(turn.date_time).format('YYYY-MM-DD HH:mm:ss-03'),
         date: dayjs(turn.date_time).format('YYYY-MM-DD'),
         time: dayjs(turn.date_time).format('HH:mm')
       }))
@@ -74,7 +74,7 @@ export class TurnModel {
 
       const turnsWithLocalTime = turns.rows.map(turn => ({
         ...turn,
-        date_time: dayjs(turn.date_time).format('YYYY-MM-DD HH:mm:ss')
+        date_time: dayjs(turn.date_time).format('YYYY-MM-DD HH:mm:ss-03')
       }))
 
       return turnsWithLocalTime
@@ -190,7 +190,7 @@ export class TurnModel {
       )
 
       return {
-        date_time: dayjs(turn.rows[0].date_time).format('YYYY-MM-DD HH:mm:ss'),
+        date_time: dayjs(turn.rows[0].date_time).format('YYYY-MM-DD HH:mm:ss-03'),
         id_turn: turn.rows[0].id_turn,
         user_id: turn.rows[0].user_id,
         service_id: turn.rows[0].service_id
@@ -218,7 +218,7 @@ export class TurnModel {
 
       turns.rows.forEach(turn => {
         // Actualiza el objeto con la nueva fecha y hora en la zona horaria deseada
-        turn.date_time = dayjs(turn.date_time).format('YYYY-MM-DD HH:mm:ss')
+        turn.date_time = dayjs(turn.date_time).format('YYYY-MM-DD HH:mm:ss-03')
         turn.date = dayjs(turn.date_time).format('YYYY-MM-DD')
         turn.time = dayjs(turn.date_time).format('HH:mm')
       })
