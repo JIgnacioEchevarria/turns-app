@@ -5,7 +5,7 @@ export const corsMiddleware = () => cors({
   origin: (origin, callback) => {
     const ACCEPTED_ORIGINS = [
       'http://localhost:5173',
-      'https://turns-app-client.vercel.app'
+      'https://turns-app.vercel.app'
     ]
 
     if (ACCEPTED_ORIGINS.includes(origin)) {
