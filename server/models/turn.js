@@ -1,5 +1,6 @@
 import { pool } from '../database/connectionPostgreSQL.js'
 import dayjs from 'dayjs'
+import moment from 'moment-timezone'
 import { ConnectionError, ForBiddenError, NotAvailableError, NotFoundError } from '../errors.js'
 
 export class TurnModel {
@@ -17,14 +18,14 @@ export class TurnModel {
 
       if (turns.rowCount === 0) throw new NotFoundError('Turns not found')
 
-      turns.rows.forEach(turn => {
-        // Actualiza el objeto con la nueva fecha y hora en la zona horaria deseada
-        turn.date_time = dayjs(turn.date_time).format('YYYY-MM-DD HH:mm:ss-03')
-        turn.date = dayjs(turn.date_time).format('YYYY-MM-DD')
-        turn.time = dayjs(turn.date_time).format('HH:mm')
-      })
+      const turnsWithLocalTime = turns.rows.map(turn => ({
+        ...turn,
+        date_time: moment(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss'),
+        date: moment(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD'),
+        time: moment(turn.date_time).tz('America/Argentina/Buenos_Aires').format('HH:mm')
+      }))
 
-      return turns.rows
+      return turnsWithLocalTime
     } catch (error) {
       if (error instanceof NotFoundError) throw error
 
@@ -52,9 +53,9 @@ export class TurnModel {
 
       const turnsWithLocalTime = turns.rows.map(turn => ({
         ...turn,
-        date_time: dayjs(turn.date_time).format('YYYY-MM-DD HH:mm:ss-03'),
-        date: dayjs(turn.date_time).format('YYYY-MM-DD'),
-        time: dayjs(turn.date_time).format('HH:mm')
+        date_time: moment(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss'),
+        date: moment(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD'),
+        time: moment(turn.date_time).tz('America/Argentina/Buenos_Aires').format('HH:mm')
       }))
 
       return turnsWithLocalTime
@@ -216,14 +217,14 @@ export class TurnModel {
 
       if (turns.rowCount === 0) throw new NotFoundError('You don´t have turns')
 
-      turns.rows.forEach(turn => {
-        // Actualiza el objeto con la nueva fecha y hora en la zona horaria deseada
-        turn.date_time = dayjs(turn.date_time).format('YYYY-MM-DD HH:mm:ss-03')
-        turn.date = dayjs(turn.date_time).format('YYYY-MM-DD')
-        turn.time = dayjs(turn.date_time).format('HH:mm')
-      })
+      const turnsWithLocalTime = turns.rows.map(turn => ({
+        ...turn,
+        date_time: moment(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss'),
+        date: moment(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD'),
+        time: moment(turn.date_time).tz('America/Argentina/Buenos_Aires').format('HH:mm')
+      }))
 
-      return turns.rows
+      return turnsWithLocalTime
     } catch (error) {
       console.log(error)
       if (error instanceof NotFoundError) throw error
