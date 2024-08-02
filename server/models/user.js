@@ -107,7 +107,6 @@ export class UserModel {
         userLogged
       }
     } catch (error) {
-      console.log(error)
       if (error instanceof InvalidCredentialsError) throw error
 
       throw new ConnectionError('Database is not available')

@@ -75,7 +75,7 @@ export class TurnModel {
 
       const turnsWithLocalTime = turns.rows.map(turn => ({
         ...turn,
-        date_time: dayjs(turn.date_time).format('YYYY-MM-DD HH:mm:ss-03')
+        date_time: moment(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss')
       }))
 
       return turnsWithLocalTime
@@ -105,7 +105,7 @@ export class TurnModel {
               startTime = startTime.set('second', 0)
               while (startTime.isBefore(endTime)) {
                 turns.push({
-                  date: startTime.format('YYYY-MM-DD HH:mm:ss-03'),
+                  date: startTime.format('YYYY-MM-DD HH:mm:ss'),
                   day: day.day
                 })
                 startTime = startTime.add(interval, 'minute')
@@ -148,7 +148,8 @@ export class TurnModel {
     const placeholders = turns.map((_, index) => `($${index + 1})`)
 
     for (const turn of turns) {
-      values.push(turn.date)
+      const dateWithOffset = dayjs(turn.date).format('YYYY-MM-DD HH:mm:ss-03')
+      values.push(dateWithOffset)
     }
 
     const query = `INSERT INTO turns (date_time) VALUES ${placeholders.join(', ')}`
