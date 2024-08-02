@@ -92,7 +92,7 @@ export class UserController {
         httpOnly: true, // La cookie solo se puede acceder en el servidor
         secure: true, // La cookie solo se puede acceder en https
         sameSite: 'none',
-        domain: 'turns-app.vercel.app',
+        domain: '.turns-app.vercel.app',
         path: '/'
       })
       return res.status(200).json({ status: 200, statusMessage: 'Successful Authentication', data: userLogged })
@@ -113,7 +113,7 @@ export class UserController {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
-      domain: 'turns-app.vercel.app',
+      domain: '.turns-app.vercel.app',
       path: '/'
     })
     return res.status(200).json({ status: 200, statusMessage: 'Success' })
