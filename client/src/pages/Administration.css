@@ -1,0 +1,376 @@
+.turns-page, .services-page, .users-page, .settings-page {
+    min-height: 100vh;
+    max-width: 1280px;
+    margin: auto;
+    padding: 3rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Services Page */
+.services-page-head {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.services-page-head h1 {
+    font-size: 2rem;
+}
+
+.services-page-head .btn-add-service {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    border: 0;
+    background: #007BFF;
+    border-radius: .2rem;
+    padding: .5rem;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.no-services-alert {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 3rem 00;
+}
+
+.no-services-alert h2 {
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.backdrop-modal-service {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .5);
+    z-index: 4;
+}
+
+.modal-service {
+    border-radius: .5rem;
+    display: flex;
+    flex-direction: column;
+    background: #FFFFFF;
+    width: 60vh;
+    max-width: 90%;
+    gap: 1.5rem;
+    animation: popup .3s ease forwards;
+}
+
+@keyframes popup {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-service-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #dee2e6;
+    padding: 2vh;
+}
+
+.modal-service-header h2 {
+    font-size: 1.5rem;
+}
+
+.modal-service-body {
+    padding: 2vh;
+}
+
+.modal-service-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+}
+
+.modal-service-formitem {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.modal-service-formitem label {
+    font-size: 1rem;
+}
+
+.modal-service-formitem input {
+    width: 100%;
+    padding: .8rem 1rem;
+    border-radius: .2rem;
+    border: 1px solid rgb(209, 213, 219);
+    font-size: 1rem;
+}
+
+.modal-service-formitem input:focus {
+    outline: 0;
+    border: 1px solid #3ea5ce;
+}
+
+.modal-service-btn-add {
+    padding: 1rem 0;
+    border-radius: .2rem;
+    border: 0;
+    font-weight: 700;
+    font-size: 2vh;
+    cursor: pointer;
+    background: #3ea5ce;
+    color: #FFFFFF;
+    transition: background .3s ease-out;
+    font-size: 1rem;
+}
+
+.modal-service-btn-add:hover {
+    background: #3082a2;
+}
+
+/* Users Page */
+.no-users-alert {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 3rem 00;
+}
+
+.users-page-head {
+    width: 100%;
+    display: flex;
+}
+
+/* Turns Page */
+.no-turns-alert {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 3rem 00;
+}
+
+.turns-page-head {
+    width: 100%;
+    display: flex;
+}
+
+.turns-page-body {
+    width: 100%;
+    display: flex;
+    gap: 2rem;
+    position: relative;
+}
+
+.calendar-admin .rdrMonth {
+    width: 100%;
+}
+
+.calendar-admin .rdrDay {
+    padding: .5rem;
+    font-size: 1rem;
+}
+
+@media (max-width: 850px) {
+    .turns-page-body {
+        flex-direction: column;
+    }
+}
+
+.turns-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+}
+
+.no-registered-turns {
+    margin: auto;
+    text-align: center;
+}
+
+.turn-list-head {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+}
+
+.turn-card {
+    background: #FFFFFF;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1rem;
+    border-radius: .2rem;
+    box-shadow: 2px 2px 4px 1px rgba(0, 0, 0, 0.2);
+}
+
+.turn-card-group {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.turn-card-group-head h3 {
+    font-size: 1.4rem;
+}
+
+.turn-card-group-body {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 1rem;
+}
+
+.turn-card-group-body p {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.turn-card-label {
+    color: #8d8a8a;
+}
+
+/* Settings page */
+.settings-page {
+    gap: 3rem;
+}
+
+.settings-page-head {
+    width: 100%;
+    display: flex;
+}
+
+.form-attention-schedule {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    border-radius: .2rem;
+}
+
+.form-attention-schedule-bottom {
+    display: flex;
+    justify-content: right;
+}
+
+.form-attention-schedule-btnsave {
+    border: 0;
+    background: #007BFF;
+    border-radius: .2rem;
+    padding: .5rem;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #FFFFFF;
+    transition: background .3s ease-out;
+}
+
+.form-attention-schedule-btnsave:hover {
+    background: #0568d1;
+}
+
+.form-attention-schedule-item {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.form-attention-schedule .input-label {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.form-attention-schedule-item > input {
+    width: 100%;
+    padding: .5rem;
+    border-radius: .2rem;
+    border: 1px solid rgb(209, 213, 219);
+    font-size: 1rem;
+}
+
+.form-attention-schedule-item input:focus {
+    outline: 0;
+    border: 1px solid #3ea5ce;
+}
+
+.success-backdrop-modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .5);
+    z-index: 4;
+}
+
+.success-modal {
+    padding: 2rem 1rem;
+    border-radius: .5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #FFFFFF;
+    width: 60vh;
+    max-width: 90%;
+    gap: 1.5rem;
+    animation: popup .3s ease forwards;
+}
+
+.success-modal h3 {
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.success-modal p {
+    font-size: 1rem;
+    text-align: center;
+}
+
+.success-modal-actions {
+    display: flex;
+    justify-content: right;
+    width: 100%;
+}
+
+.success-modal-actions button {
+    border: 0;
+    border-radius: .2rem;
+    padding: .5rem 1rem;
+    background: #3ea5ce;
+    color: #FFFFFF;
+    cursor: pointer;
+}

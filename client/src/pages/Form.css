@@ -1,0 +1,196 @@
+.registration-page, .login-page {
+    max-width: 600px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+    gap: 3rem;
+    min-height: 100vh;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+}
+
+.form-item {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.form-item label {
+    font-size: 1rem;
+}
+
+.form-item input {
+    width: 100%;
+    padding: .8rem 1rem;
+    border-radius: .2rem;
+    border: 1px solid rgb(209, 213, 219);
+    font-size: 1rem;
+}
+
+.form-item input:focus {
+    outline: 0;
+    border: 1px solid #3ea5ce;
+}
+
+.input-help {
+    font-size: .8rem;
+    color: #949292;
+}
+
+.form-btn {
+    padding: 1rem 0;
+    border-radius: .2rem;
+    border: 0;
+    font-weight: 700;
+    font-size: 2vh;
+    cursor: pointer;
+}
+
+.form-btn-main:hover {
+    background: #3082a2;
+}
+
+.form-btn-main {
+    background: #3ea5ce;
+    color: #FFFFFF;
+    transition: background .3s ease-out;
+    font-size: 1rem;
+}
+
+.form-error {
+    font-size: 2.5vh;
+    color: #991B1B;
+    background: #e6c1c1;
+    padding: 1rem;
+    border-radius: .5rem;
+    border: 1px solid #991B1B;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.form-success {
+    font-size: 2.5vh;
+    color: #0A3622;
+    background: #D1E7DD;
+    padding: 1rem;
+    border-radius: .5rem;
+    border: 1px solid #0A3622;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    font-weight: 600;
+}
+
+.form-input-error {
+    color: #DC2626;
+}
+
+.container-popup-register {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .5);
+    z-index: 2;
+}
+
+.popup-register {
+    background: #F3F3F3;
+    padding: 1rem;
+    border-radius: .5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    animation: popupRegister .3s ease forwards;
+    max-width: 90%;
+}
+
+@keyframes popupRegister {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+}
+
+.popup-register button {
+    background: #3ea5ce;
+    color: #FFFFFF;
+    border: 0;
+    padding: 1rem 5rem;
+    border-radius: .2rem;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.popup-register h2 {
+    font-size: 2rem;
+    text-align: center;
+}
+
+.popup-register p {
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+.popup-register-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.popup-register-buttons a {
+    text-decoration: none;
+    font-size: 1.5rem;
+    padding: .5rem 1rem;
+    border-radius: .2rem;
+    font-weight: 500;
+}
+
+.popup-register-btn-login {
+    background: #3ea5ce;
+    color: #FFFFFF;
+    transition: background .3s ease-out;
+}
+
+.popup-register-btn-login:hover {
+    background: #3082a2;
+}
+
+.popup-register-btn-registration {
+    background: transparent;
+    color: #3ea5ce;
+}
+
+.access-denied-msg {
+    color: #DC3545;
+    background: #F8D7DA;
+    font-weight: 700;
+    padding: 1rem;
+    border-radius: .2rem;
+    width: 20rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}

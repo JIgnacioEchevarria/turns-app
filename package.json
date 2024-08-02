@@ -1,0 +1,21 @@
+{
+  "name": "turns-app",
+  "version": "1.0.0",
+  "description": "- El backend ya estaria, termine de realizar todas las funcionalidades de los turnos.\r - Se puede solicitar, cancelar turnos. El admina puede generar turnos, tambien puede consultar los turnos agendados.\r - Se puede consultar los turnos disponibles de un dia.\r - Un usuario puede ver sus turnos.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "standard": "17.1.0"
+  },
+  "eslintConfig": {
+    "extends": "standard",
+    "rules": {
+      "no-unused-vars": "off"
+    }
+  }
+}
