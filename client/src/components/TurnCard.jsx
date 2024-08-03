@@ -21,7 +21,7 @@ export const TurnCard = ({ info }) => {
             </div>
             <div className='turn-card-group-body'>
                 <p><span className='turn-card-label'>Nombre:</span> {info.username}</p>
-                <p><span className='turn-card-label'>Email:</span> {info.userEmail}</p>
+                <p><span className='turn-card-label'>Email:</span> {info.useremail}</p>
                 <p><span className='turn-card-label'>Teléfono:</span> {info.phone_number}</p>
             </div>
         </div>
