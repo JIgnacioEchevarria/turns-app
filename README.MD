@@ -1,202 +1,129 @@
-### Endpoints
 
-## Turnos
+# Sistema de Gestión de Turnos
 
-Obtener todos los turnos registrados (Solo admin)
-- URL: http://localhost:1234/api/v1/turns/{date}/registered
-- Método: GET
-- Credentials: include
+Una aplicación web fullstack para facilitar la gestión de turnos en diversas industrias, como barberias, salones de belleza, y otros servicios que requieren de una cita previa. El proyecto esta desarrollado con Node.js y Express en el backend y React con Material-UI para el frontend.
+La aplicación cuenta con dos tipos de usuarios con diferentes niveles de acceso:
 
-Obtener mis turnos solicitados (Solo usuarios loggeados)
-- URL: http://localhost:1234/api/v1/turns/user
-- Método: GET
-- Credentials: include
+- **Cliente**: Usuarios que reservan turnos y gestionan su información personal.
+- **Administrador**: Usuarios con permisos elevados que gestionan la aplicación y los turnos disponibles.
 
-Obtener los turnos disponibles para un determinado día
-- URL: http://localhost:1234/api/v1/turns/{date}/available
-- Método: GET
-- Parámetros de ruta:
-    date: La fecha para la cual se desean obtener los turnos disponibles.
+## Objetivo
+El objetivo principal del proyecto es dar una solución simple para la administración de turnos, perimitiendo a los usuarios finales solicitar turnos y a los administradores gestionar la disponibilidad de turnos y servicios de manera sencilla y organizada.
+## Demo
 
-Generar turnos (Solo admin)
-- Descripción: Esta ruta sirve para generar los turnos disponibles en la web.
-- URL: http://localhost:1234/api/v1/turns
-- Método: POST
-- Credentials: include
-- Headers:
-    Content-Type: application/json
-- Body: 
-    {
-        "startHour1": 8,
-        "endHour1": 12,
-        "startHour2": 16,
-        "endHour2": 20
-    }
-    
-    'startHour1' (obligatorio): Horario desde el cual se generan los turnos.
-    'endHour1' (obligatorio): Horario hasta el cual se generan los turnos.
-    'startHour2' (opcional): Horario desde el cual se generan los turnos para el segundo rango de horario opcional.
-    'endHour2' (opcional): Horario hasta el cual se generan los turnos para el segundo rango de horario opcional.
+Puedes probar la aplicación en vivo aquí: [Sistema de Gestión de Turnos - Demo](https://jieturnos.vercel.app)
 
-Solicitar un turno (Solo usuarios loggeados)
-- URL: http://localhost:1234/api/v1/turns?turnId={id-turn}&serviceId={id-service}
-- Método: PATCH
-- Credentials: include
-- Parámetros de consulta:
-    'turnId' (obligatorio): El ID único del turno que se desea solicitar.
-    'serviceId' (obligatorio): El ID único del servicio que se desea consumir en el turno.
+### Cuentas de prueba
+Para explorar la aplicación desde diferentes perspectivas, usa laas siguientes credenciales de prueba:
 
-Cancelar un turno (Solo usuarios loggeados)
-- URL: http://localhost:1234/api/v1/turns/{id-turn}/status
-- Método: PATCH
-- Credentials: include
+#### Cliente
+- **Email**: cliente@example.com
+- **Contraseña**: cliente123
 
-## Servicios
+#### Administrador
+- **Email**: admin@example.com
+- **Contraseña**: admin123
+## Screenshots
 
-Obtener todos los servicios
-- URL: http://localhost:1234/api/v1/services
-- Method: GET
+- **Pantalla de inicio**: ![Pantalla de inicio](./assets/screenshots/home.PNG)
 
-Crear un servicio (Solo admin)
-- URL: http://localhost:1234/api/v1/services
-- Método: POST
-- Credentials: include
-- Headers:
-    Content-Type: application/json
-- Body:
-    {
-        "name": "Corte y barba",
-        "duration": 30,
-        "price" 5500
-    }
+- **Programación de calendario**: ![Pantalla de inicio](./assets/screenshots/calendar.PNG)
 
-    'name' (obligatorio): Nombre del servicio.
-    'duration' (obligatorio): Duración del turno exresada en minutos.
-    'price' (obligatorio): Valor del turno.
 
-Eliminar un servicio (Solo admin)
-- URL: http://localhost:1234/api/v1/services/{id}/deactivate
-- Método: PATCH
-- Credentials: include
-- Parámetros de ruta:
-    'id': El ID único del servicio que se desea eliminar.
+## Features
 
-Editar un servicio (Solo admin)
-- URL: http://localhost:1234/api/v1/services/{id}
-- Método: PATCH
-- Credentials: include
-- Parámetros de ruta:
-    'id': El ID único del servicio que se desea editar.
-- Headers:
-    Content-Type: application/json
-- Body:
-    {
-        "name": "Corte",
-        "duration" 30,
-        "price": 5500
-    }
+### Funcionalidades Principales
 
-    'name (opcional)': Nombre del servicio.
-    'duration (opcional)': Duración del servicio.
-    'price (opcional)': Valor del servicio.
+- **Registro y Autenticación de Usuarios**: Permite a los usuarios registrarse y autenticarse de manera segura utilizando JWT.
+- **Programación de Turnos**: Clientes y administradores pueden visualizar la disponibilidad y reservar turnos de manera intuitiva.
+- **Modificar Información de Perfil**: Tanto clientes como administadores tienen la posibilidad de modificar su información (Contraseña, Nombre de usuario, Teléfono).
+- **Visualizar reservas**: Los usuarios pueden ver sus reservas y cancelarlas si es posible.
 
-## Usuarios
+### Funcionalidades de Administración:
+- **Gestión de usuarios**: Los administradores pueden visualizar todos los usuarios de la aplicación y tienen la posibilidad de asignarle otro rol.
+- **Configuración de servicios**: Los administradores pueden visualizar, agregar, editar y eliminar los servicios disponibles de la aplicación.
+- **Configuración de Calendario**: Los administradores pueden ajustar los horarios de disponibilidad para los turnos, establecer la duración de cada uno, y definir hasta qué fecha es válida esta configuración.
+- **Visualizar Reservas de Clientes**: Los administradores pueden visualizar las reservas de todos los usuarios por fecha para organizarse.
 
-Obtener todos los usuarios (Solo admin)
-- URL: http://localhost:1234/api/v1/users
-- Método: GET
-- Credentials: include
+### Otros
+- **Interfaz Responsive**: Diseño adaptable para garantizar una buena experiencia en dispositivos móviles y de escritorio.
+- **Adaptado a la Zona Horaria de Argentina**: Los horarios de disponibilidad y la programación de turnos están configurados para ajustarse a la zona horaria de Argentina (ART). Esto asegura que la aplicación funcione correctamente según la hora local en Argentina.
 
-Registrarse
-- URL: http://localhost:1234/api/v1/users
-- Método: POST
-- Headers:
-    Content-Type: application/json
-- Body:
-    {
-        "name": "JuanPerez",
-        "email": "juanperez8912@gmail.com,
-        "password": "chacabuco1892",
-        "passwordConfirm": "chacabuco1892",
-        "phoneNum": "2389012368"
-    }
+### Funcionalidades Futuras
+Estas son algunas de las funcionalidades que planeo agregar en futuras versiones del proyecto:
 
-    'name (obligatorio)': Nombre de usuario.
-    'email (obligatorio)': Correo electrónico del usuario.
-    'password (obligatorio)': Contraseña del usuario.
-    'passwordConfirm (obligatorio)': Confirmación de contraseña del usuario.
-    'phoneNum (obligatorio)': Número de teléfono del usuario.
+- **Notificaciones**: Implementar un sistema de notificaciones para confirmar reservas y enviar recordatorios a los usuarios.
+## Tech Stack
 
-Editar perfil (Solo usuarios loggeados)
-- Descripción: Permite editar información personal como el nombre de usuario o el número de teléfono.
-- URL: http://localhost:1234/api/v1/users
-- Método: PATCH
-- Credentials: include
-- Headers:
-    Content-Type: application/json
-- Body:
-    {
-        "name": "julioguti",
-        "phoneNum" "2456890769"
-    }
+**Client:** React, Material-UI, Vite
 
-    'name (opcional)': Nombre de usuario.
-    'phoneNum (opcional)': Número de teléfono del usuario.
+**Server:** Node, Express
 
-Obtener mi información de usuario (Solo usuarios loggeados)
-- Descripción: Obtiene la información personal del usuario.
-- URL: http://localhost:1234/api/v1/users/info
-- Método: GET
-- Credentials: include
 
-Editar contraseña (Solo usuarios loggeados)
-- Descripción: Permite modificar la contraseña de acceso.
-- URL: http://localhost:1234/api/v1/users/password
-- Método: PATCH
-- Credentials: include
-- Headers:
-    Content-Type: application/json
-- Body:
-    {
-        "currentPassword": "oscarguti891",
-        "newPassword": "perrito123",
-        "passwordConfirm": "perrito123
-    }
+## Instalación
 
-    'currentPassword' (obligatorio): Contraseña actual del usuario.
-    'newPassword' (obligatorio): Nueva contraseña deseada.
-    'passwordConfirm' (obligatorio): 'Confirmación de la nueva contraseña.
+Para instalar y ejecutar el proyecto en tu entorno local, sigue estos pasos:
 
-Cambiar rol (Solo administradores)
-- Descripción: Permite cambiarle el rol a un usuario.
-- URL: http://localhost:1234/api/v1/users/role
-- Método: PATCH
-- Credentials: include
-- Headers:
-    Content-Type: application/json
-- Body:
-    {
-        "id": "422r8fuwrugfnw4g",
-        "role": "client"
-    }
+### Prerrequisitos
+Asegurate de tener instalados los siguientes programas en tu sistema:
 
-    'id' (obligatorio): Id del usuario a cambiar el rol.
-    'role' (obligatorio): Nuevo rol a asignar.
+- [Node.js](https://nodejs.org/) (Vesión 20.14.0)
+- [npm](https://www.npmjs.com/)
 
-Iniciar sesión
-- URL: http://localhost:1234/api/v1/users/auth
-- Método: POST
-- Headers:
-    Content-Type: application/json
-- Body:
-    {
-        "email": "oscarguti90@gmail.com",
-        "password": "perrito123"
-    }
+### Clonar el repositorio
 
-    'email' (obligatorio): Correo electrónico del usuario.
-    'password' (obligatorio): Contraseña del usuario.
+```bash
+git clone https://github.com/JIgnacioEchevarria/turns-app.git
+```
 
-Cerrar sesión
-- URL: http://localhost:1234/api/v1/users/logout
-- Método: POST
+### Configuración del proyecto
+El proyecto está dividido en dos partes: el backend (server) y el frontend (client). Sigue los siguientes pasos para configurar ambos.
+
+#### Configurar backend
+Navegar a la carpeta del backend:
+```bash
+cd turns-app/server
+```
+Instalar las dependencias del backend:
+```bash
+npm install
+```
+Copiar el archivo de configuración de ejemplo para crear tu archivo .env:
+```bash
+cp .env.example .env
+```
+
+Abrir el archivo .env y ajustar las variables de entorno según tu configuración local.
+Asegúrate de proporcionar valores reales para las variables necesarias como JWT_SECRET_KEY, DB_HOST, DB_USER, etc.
+
+Arrancar el servidor:
+```bash
+npm run dev
+```
+El servidor backend debería estar corriendo en el puerto configurado (por defecto suele ser http://localhost:4000).
+#### Configurar frontend
+Navegar a la carpeta del frontend:
+```bash
+cd ../client
+```
+Instalar las dependencias del frontend:
+```bash
+npm install
+```
+Copiar el archivo de configuración de ejemplo para crear tu archivo .env:
+```bash
+cp .env.example .env
+```
+
+Abrir el archivo .env y ajustar las variables de entorno según tu configuración local.
+
+Ejecutar el frontend:
+```bash
+npm run dev
+```
+La aplicación frontend debería estar corriendo en http://localhost:5173 por defecto.
+## Contacto
+Si tienes alguna pregunta o comentario sobre el proyecto, no dudes en ponerte en contacto conmigo:
+
+- **Email**: echevarriajignacio@gmail.com
+

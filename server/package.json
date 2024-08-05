@@ -26,6 +26,8 @@
     "jsonwebtoken": "9.0.2",
     "moment-timezone": "0.5.45",
     "pg": "8.12.0",
+    "swagger-jsdoc": "6.2.8",
+    "swagger-ui-express": "5.0.1",
     "zod": "3.22.4"
   },
   "devDependencies": {

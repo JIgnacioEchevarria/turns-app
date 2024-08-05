@@ -7,6 +7,7 @@ import { createUserRouter } from './routes/users.js'
 import { UserModel } from './models/user.js'
 import { ServiceModel } from './models/service.js'
 import { TurnModel } from './models/turn.js'
+import { setupSwagger } from './swagger.js'
 
 const app = express()
 
@@ -15,6 +16,9 @@ app.use(json())
 app.use(corsMiddleware())
 app.use(cookieParser())
 app.disable('x-powered-by')
+
+// Swagger
+setupSwagger(app)
 
 // Rutas de la API
 app.use('/api/v1/turns', createTurnRouter({ turnModel: TurnModel }))
