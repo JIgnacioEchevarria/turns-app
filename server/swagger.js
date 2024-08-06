@@ -5,9 +5,8 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'API de Gestión de Turnos',
-      version: '1.0.0',
-      description: 'Documentación de la API REST para la Gestión de turnos'
+      title: 'API Gestión de Turnos',
+      version: '1.0.0'
     }
   },
   apis: ['./routes/*.js']
@@ -16,5 +15,9 @@ const options = {
 const swaggerSpec = swaggerJSDoc(options)
 
 export const setupSwagger = (app) => {
-  app.use('/api/v1/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+  app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+  app.get('/api/v1/docs.json', (req, res) => {
+    res.setHeader('Content-type', 'application/json')
+    res.send(swaggerSpec)
+  })
 }

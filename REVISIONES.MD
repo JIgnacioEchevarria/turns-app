@@ -112,3 +112,8 @@
 - Decidi cambiar de gestor de base de datos, ahora utilizo postgreSQL.
 - Esto me favorecio mucho en terminos de manejo de fechas y horas y uuids.
 - Falta implementar las siguientes funcionalidades: solicitar turno, cancelar turno, obtener mis turnos, obtener turnos de usuarios (admin)
+
+### Revisión 6/8/2024
+- Falta terminar la documentación de la API REST con swagger
+- Verificar ejemplos de la documentación, si conviene dejar ejemplos reales o con types.
+- Buscar si hay alguna manera de especificar mas validaciones en swagger, como un minimo de letras y demas.

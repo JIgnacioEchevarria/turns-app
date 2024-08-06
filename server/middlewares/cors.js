@@ -4,6 +4,7 @@ import { CorsError } from '../errors.js'
 export const corsMiddleware = () => cors({
   origin: (origin, callback) => {
     const ACCEPTED_ORIGINS = [
+      'http://localhost:4000',
       'http://localhost:5173',
       'https://jieturns.vercel.app'
     ]

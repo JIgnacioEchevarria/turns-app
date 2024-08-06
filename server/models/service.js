@@ -37,7 +37,7 @@ export class ServiceModel {
       const result = await pool.query(
         `INSERT INTO services (name, duration, price)
           VALUES ($1, $2, $3)
-          RETURNING id_service, name, duration, price;;`,
+          RETURNING id_service, name, duration, price, is_active;`,
         [name, duration, price]
       )
 
@@ -47,7 +47,8 @@ export class ServiceModel {
         id: newService.id_service,
         name: newService.name,
         duration: newService.duration,
-        price: newService.price
+        price: newService.price,
+        is_active: newService.is_active
       }
     } catch (error) {
       if (error instanceof AlreadyExistsError) throw error
@@ -135,7 +136,7 @@ export class ServiceModel {
       await pool.query(updateQuery, updatedValues)
 
       const updatedServices = await pool.query(
-        `SELECT id_service, name, duration, price
+        `SELECT id_service AS id, name, duration, price, is_active
           FROM services
           WHERE id_service = $1;`,
         [id]

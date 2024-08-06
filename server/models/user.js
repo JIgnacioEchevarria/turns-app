@@ -24,7 +24,7 @@ export class UserModel {
   static async getById ({ id }) {
     try {
       const users = await pool.query(
-        `SELECT id_user, name, email, phone_number, role
+        `SELECT id_user AS id, name, email, phone_number, role
           FROM users
           WHERE id_user = $1;`,
         [id]
@@ -61,14 +61,12 @@ export class UserModel {
       if (nameVerification.rows > 0) throw new AlreadyExistsError('There is already a user with that username')
       if (emailVerification.rows > 0) throw new AlreadyExistsError('There is already a user with that email')
 
-      const role = 'client'
-
       const hashedPassword = await bcrypt.hash(password, 10)
 
       await pool.query(
-        `INSERT INTO users (name, email, password, phone_number, role)
-          VALUES ($1, $2, $3, $4, $5);`,
-        [name, email, hashedPassword, phoneNum, role]
+        `INSERT INTO users (name, email, password, phone_number)
+          VALUES ($1, $2, $3, $4);`,
+        [name, email, hashedPassword, phoneNum]
       )
     } catch (error) {
       if (error instanceof AlreadyExistsError) throw error
