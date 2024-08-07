@@ -24,7 +24,7 @@ export const MyAccountPage = () => {
             <CircularProgress size={80} className='loading-circle' />
           </div>
         }
-        {!isLoading && turnError && turnError.statusMessage === 'For Bidden Error' &&
+        {!isLoading && turnError && turnError.statusMessage === 'Unauthorized' &&
           <PopupAlert handleClosePopup={handleClosePopUpTurnError} errorMessage={turnErrorMessages(turnError.error)} />
         }
         <h1 className='section-title'>Mi cuenta</h1>

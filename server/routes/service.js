@@ -128,8 +128,8 @@ export const createServiceRouter = ({ serviceModel }) => {
    *                - duration
    *                - price
    *              example:
-   *                name: "New Service Name"
-   *                duration: 100
+   *                name: "Haircut"
+   *                duration: 45
    *                price: 100
    *      responses:
    *        201:
@@ -234,10 +234,11 @@ export const createServiceRouter = ({ serviceModel }) => {
    *          required: true
    *          schema:
    *            type: string
+   *            format: uuid
    *          description: The ID of the service to delete
    *      responses:
    *        200:
-   *          description: service successfully removed
+   *          description: Service successfully removed
    *          content:
    *            application/json:
    *              schema:
@@ -311,6 +312,7 @@ export const createServiceRouter = ({ serviceModel }) => {
    *          required: true
    *          schema:
    *            type: string
+   *            format: uuid
    *          description: The ID of the service to edit
    *      requestBody:
    *        required: true
@@ -326,8 +328,8 @@ export const createServiceRouter = ({ serviceModel }) => {
    *                price:
    *                  type: integer
    *              example:
-   *                name: "Updated Service Name"
-   *                duration: 100
+   *                name: "Hair and beard cut"
+   *                duration: 60
    *                price: 100
    *      responses:
    *        200:

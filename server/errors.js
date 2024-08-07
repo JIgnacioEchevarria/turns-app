@@ -53,3 +53,11 @@ export class CorsError extends Error {
     this.stack = ''
   }
 }
+
+export class UnauthorizedError extends Error {
+  constructor (message) {
+    super(message)
+    this.name = 'UnauthorizedError'
+    this.stack = ''
+  }
+}

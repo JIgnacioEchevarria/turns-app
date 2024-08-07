@@ -139,13 +139,13 @@ export const SettingsPage = () => {
   const location = useLocation()
 
   const [daysOfWeek, setDaysOfWeek] = useState([
-    { dayIndex: 1, day: 'Lunes', checked: false, timeSlots: [{ start: null, end: null }] },
-    { dayIndex: 2, day: 'Martes', checked: false, timeSlots: [{ start: null, end: null }] },
-    { dayIndex: 3, day: 'Miércoles', checked: false, timeSlots: [{ start: null, end: null }] },
-    { dayIndex: 4, day: 'Jueves', checked: false, timeSlots: [{ start: null, end: null }] },
-    { dayIndex: 5, day: 'Viernes', checked: false, timeSlots: [{ start: null, end: null }] },
-    { dayIndex: 6, day: 'Sábado', checked: false, timeSlots: [{ start: null, end: null }] },
-    { dayIndex: 0, day: 'Domingo', checked: false, timeSlots: [{ start: null, end: null }] }
+    { dayIndex: 1, day: 'Monday', checked: false, timeSlots: [{ start: null, end: null }] },
+    { dayIndex: 2, day: 'Tuesday', checked: false, timeSlots: [{ start: null, end: null }] },
+    { dayIndex: 3, day: 'Wednesday', checked: false, timeSlots: [{ start: null, end: null }] },
+    { dayIndex: 4, day: 'Thursday', checked: false, timeSlots: [{ start: null, end: null }] },
+    { dayIndex: 5, day: 'Friday', checked: false, timeSlots: [{ start: null, end: null }] },
+    { dayIndex: 6, day: 'Saturday', checked: false, timeSlots: [{ start: null, end: null }] },
+    { dayIndex: 0, day: 'Sunday', checked: false, timeSlots: [{ start: null, end: null }] }
   ])
 
   useEffect(() => {
@@ -236,6 +236,8 @@ export const SettingsPage = () => {
     setDaysOfWeek(newDaysOfWeek)
   }, [daysOfWeek])
 
+  const calendarError = turnError && turnError.statusMessage === 'Validation Error' && turnError.error.find(e => e.field === 'timeSlots')
+
   return (
     <div className='settings-page'>
       {!isLoading && showSuccessGenerate &&
@@ -254,8 +256,11 @@ export const SettingsPage = () => {
           <CircularProgress size={80} className='loading-circle' />
         </div>
       }
-      {turnError && turnError.status !== 403 &&
+      {turnError && turnError.status !== 403 && turnError.status !== 422 &&
         <PopupAlert handleClosePopup={handleClosePopUp} errorMessage={turnErrorMessages(turnError.error)} />
+      }
+      {calendarError &&
+        <PopupAlert handleClosePopup={handleClosePopUp} errorMessage={turnErrorMessages(calendarError.message)} />
       }
       <div className='settings-page-head'>
         <h1>Configuración del calendario</h1>

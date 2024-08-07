@@ -1,7 +1,7 @@
 import { pool } from '../database/connectionPostgreSQL.js'
 import dayjs from 'dayjs'
 import moment from 'moment-timezone'
-import { ConnectionError, ForBiddenError, NotAvailableError, NotFoundError } from '../errors.js'
+import { ConnectionError, UnauthorizedError, NotAvailableError, NotFoundError } from '../errors.js'
 
 export class TurnModel {
   static async getAll ({ date }) {
@@ -185,17 +185,17 @@ export class TurnModel {
       )
 
       const turn = await pool.query(
-        `SELECT id_turn, user_id, service_id, date_time
+        `SELECT id_turn, user_id AS id_user, service_id AS id_service, date_time
           FROM turns
           WHERE id_turn = $1;`,
         [turnId]
       )
 
       return {
-        date_time: dayjs(turn.rows[0].date_time).format('YYYY-MM-DD HH:mm:ss-03'),
+        date_time: moment(turn.rows[0].date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss'),
         id_turn: turn.rows[0].id_turn,
-        user_id: turn.rows[0].user_id,
-        service_id: turn.rows[0].service_id
+        id_user: turn.rows[0].id_user,
+        id_service: turn.rows[0].id_service
       }
     } catch (error) {
       if (error instanceof NotAvailableError) throw error
@@ -207,7 +207,7 @@ export class TurnModel {
   static async getUserTurns ({ userId }) {
     try {
       const turns = await pool.query(
-        `SELECT t.id_turn, user_id, u.name username, t.service_id, s.name service, s.duration, s.price, t.date_time
+        `SELECT t.id_turn, user_id AS id_user, u.name username, t.service_id AS id_service, s.name service, s.duration, s.price, t.date_time
           FROM turns t
           INNER JOIN users u ON t.user_id = u.id_user
           INNER JOIN services s ON t.service_id = s.id_service
@@ -251,7 +251,7 @@ export class TurnModel {
       const currentDate = dayjs()
       const diffHours = turnDate.diff(currentDate, 'hour')
 
-      if (diffHours <= 24) throw new ForBiddenError('You cannot cancel the turn because the time limit has been exceeded')
+      if (diffHours <= 24) throw new UnauthorizedError('You cannot cancel the turn because the time limit has been exceeded')
 
       await pool.query(
         `UPDATE turns SET available = true, user_id = null, service_id = null
@@ -261,7 +261,7 @@ export class TurnModel {
       )
     } catch (error) {
       if (error instanceof NotFoundError) throw error
-      if (error instanceof ForBiddenError) throw error
+      if (error instanceof UnauthorizedError) throw error
 
       throw new ConnectionError('Database is not available')
     }

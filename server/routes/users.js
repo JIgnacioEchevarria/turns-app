@@ -420,6 +420,19 @@ export const createUserRouter = ({ userModel }) => {
    *                        type: string
    *                      role:
    *                        type: string
+   *        403:
+   *          description: Access not authorized
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 403
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Access Not Authorized"
    *        400:
    *          description: Missing parameters
    *          content:
@@ -471,12 +484,374 @@ export const createUserRouter = ({ userModel }) => {
   */
   usersRouter.get('/info', validateAccessToken, userController.getById)
 
+  /**
+   * @swagger
+   *  /api/v1/users/password:
+   *    patch:
+   *      summary: Edit password
+   *      tags: [User]
+   *      security:
+   *        - cookieAuth: []
+   *      requestBody:
+   *        required: true
+   *        content:
+   *          appliction/json:
+   *            schema:
+   *              type: object
+   *              properties:
+   *                currentPassword:
+   *                  type: string
+   *                newPassword:
+   *                  type: string
+   *                passwordConfirm:
+   *                  type: string
+   *              required:
+   *                - currentPassword
+   *                - newPassword
+   *                - passwordConfirm
+   *              example:
+   *                currentPassword: "currentpassword"
+   *                newPassword: "newpassword"
+   *                passwordConfirm: "confirmpassword"
+   *      responses:
+   *        200:
+   *          description: Password updated successfully
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 200
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Success"
+   *        403:
+   *          description: Access not authorized
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 403
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Access Not Authorized"
+   *        422:
+   *          description: Validation error
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 422
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Validation Error"
+   *                  error:
+   *                    type: array
+   *                    items:
+   *                      type: object
+   *                      properties:
+   *                        field:
+   *                          type: string
+   *                          example: "password"
+   *                        message:
+   *                          type: string
+   *                          example: "Passwords do not match"
+   *        400:
+   *          description: Missing parameters
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 400
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Missing Parameters"
+   *                  error:
+   *                    type: string
+   *                    example: "Missing required parameters"
+   *        404:
+   *          description: User not found
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 404
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Not Found"
+   *                  error:
+   *                    type: string
+   *                    example: "User not found"
+   *        401:
+   *          description: Incorrect password
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 401
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Invalid Credentials"
+   *                  error:
+   *                    type: string
+   *                    example: "Incorrect password"
+   *        500:
+   *          description: Failed Connection
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 500
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Failed Connection"
+   *                  error:
+   *                    type: string
+   *                    example: "Database is not available"
+  */
   usersRouter.patch('/password', validateAccessToken, userController.editPassword)
 
+  /**
+   * @swagger
+   *  /api/v1/users/role:
+   *    patch:
+   *      summary: Change role to a user
+   *      tags: [User]
+   *      security:
+   *        - cookieAuth: []
+   *      requestBody:
+   *        required: true
+   *        content:
+   *          application/json:
+   *            schema:
+   *              type: object
+   *              properties:
+   *                id:
+   *                  type: string
+   *                  format: uuid
+   *                role:
+   *                  type: string
+   *              required:
+   *                - id
+   *                - role
+   *              example:
+   *                id: "ed205999-b6ea-417b-8bfc-a3eb9a603b1a"
+   *                role: "admin"
+   *      responses:
+   *        200:
+   *          description: Role updated successfully
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 200
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Success"
+   *        403:
+   *          description: Access not authorized
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 403
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Access Not Authorized"
+   *        400:
+   *          description: Bad request
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 400
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Bad Request"
+   *                  error:
+   *                    type: string
+   *                    example: "Invalid role provided"
+   *        404:
+   *          description: User not found
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 404
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Not Found"
+   *                  error:
+   *                    type: string
+   *                    example: "User not found"
+   *        500:
+   *          description: Failed Connection
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 500
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Failed Connection"
+   *                  error:
+   *                    type: string
+   *                    example: "Database is not available"
+  */
   usersRouter.patch('/role', validateAccessToken, isAdmin, userController.changeRole)
 
+  /**
+   * @swagger
+   *  /api/v1/users/auth:
+   *    post:
+   *      summary: Login
+   *      tags: [User]
+   *      requestBody:
+   *        required: true
+   *        content:
+   *          application/json:
+   *            schema:
+   *              type: object
+   *              properties:
+   *                email:
+   *                  type: string
+   *                  format: email
+   *                password:
+   *                  type: string
+   *                  format: password
+   *              required:
+   *                - email
+   *                - password
+   *              example:
+   *                email: "example@example.com"
+   *                password: "password"
+   *      responses:
+   *        200:
+   *          description: Successfull login
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 200
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Success"
+   *                  data:
+   *                    type: object
+   *                    properties:
+   *                      id:
+   *                        type: string
+   *                        format: uuid
+   *                        example: "ed205999-b6ea-417b-8bfc-a3eb9a603b1a"
+   *                      name:
+   *                        type: string
+   *                        example: "JuanPerez45"
+   *                      email:
+   *                        type: string
+   *                        format: email
+   *                        example: "example@example.com"
+   *                      phoneNumber:
+   *                        type: string
+   *                        example: "2344899075"
+   *                      role:
+   *                        type: string
+   *                        example: "client"
+   *        401:
+   *          description: Incorrect password
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 401
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Invalid Credentials"
+   *                  error:
+   *                    type: string
+   *                    example: "Incorrect password"
+   *        500:
+   *          description: Failed Connection
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 500
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Failed Connection"
+   *                  error:
+   *                    type: string
+   *                    example: "Database is not available"
+  */
   usersRouter.post('/auth', userController.login)
 
+  /**
+   * @swagger
+   *  /api/v1/users/logout:
+   *    post:
+   *      summary: Logout
+   *      tags: [User]
+   *      security:
+   *        - cookieAuth: []
+   *      responses:
+   *        200:
+   *          description: Successfull logout
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 200
+   *                  statusMessage:
+   *                    type: integer
+   *                    example: "Success"
+  */
   usersRouter.post('/logout', userController.logout)
 
   return usersRouter

@@ -1,6 +1,10 @@
 import dayjs from 'dayjs'
-import { ConnectionError, ForBiddenError, NotAvailableError, NotFoundError } from '../errors.js'
+import customParseFormat from 'dayjs/plugin/customParseFormat.js'
+import { ConnectionError, UnauthorizedError, NotAvailableError, NotFoundError } from '../errors.js'
 import { validateCalendar } from '../schemes/schemes.js'
+import { isValidUuid } from '../utils/validation.js'
+
+dayjs.extend(customParseFormat)
 
 export class TurnController {
   constructor ({ turnModel }) {
@@ -28,6 +32,10 @@ export class TurnController {
   getTurnsByDate = async (req, res) => {
     try {
       const date = req.params.date
+
+      const format = 'YYYY-MM-DD'
+
+      if (!dayjs(date, format, true).isValid()) return res.status(422).json({ status: 422, statusMessage: 'Validation Error', error: 'Invalid date format' })
 
       const turns = await this.turnModel.getTurnsByDate({ date })
 
@@ -67,20 +75,20 @@ export class TurnController {
       for (const day of attentionSchedule) {
         if (day.checked) {
           const validSlots = day.timeSlots.every(slot => slot.start !== null && slot.end !== null)
-          if (!validSlots) return res.status(422).json({ status: 422, statusMessage: 'Validation Error', error: 'Invalid calendar settings' })
+          if (!validSlots) return res.status(422).json({ status: 422, statusMessage: 'Validation Error', error: [{ field: 'timeSlots', message: 'Invalid time slots' }] })
           // Por cada franja horaria se verifica que el comienxo no sea mayor que el final.
           for (const slot of day.timeSlots) {
             const start = dayjs(`${today}T${slot.start}`)
             const end = dayjs(`${today}T${slot.end}`)
 
-            if (start.isAfter(end) || start.isSame(end)) return res.status(422).json({ status: 422, statusMessage: 'Validation Error', error: 'Invalid calendar settings' })
+            if (start.isAfter(end) || start.isSame(end)) return res.status(422).json({ status: 422, statusMessage: 'Validation Error', error: [{ field: 'timeSlots', message: 'Invalid time slots' }] })
           }
           // Si se tiene dos franjas horarias en un dia, se verifica que el final de la primer franja
           // no sea mayor que el comienzo de la segunda
           if (day.timeSlots.length === 2) {
             const endFirstTimeSlot = dayjs(`${today}T${day.timeSlots[0].end}`)
             const startSecondTimeSlot = dayjs(`${today}T${day.timeSlots[1].start}`)
-            if (endFirstTimeSlot.isAfter(startSecondTimeSlot) || endFirstTimeSlot.isSame(startSecondTimeSlot)) return res.status(422).json({ status: 422, statusMessage: 'Validation Error', error: 'Invalid calendar settings' })
+            if (endFirstTimeSlot.isAfter(startSecondTimeSlot) || endFirstTimeSlot.isSame(startSecondTimeSlot)) return res.status(422).json({ status: 422, statusMessage: 'Validation Error', error: [{ field: 'timeSlots', message: 'Invalid time slots' }] })
           }
         }
       }
@@ -108,9 +116,10 @@ export class TurnController {
       const { turnId, serviceId } = req.query
       const userId = req.user.id
 
-      if (!turnId || !userId || !serviceId) {
-        return res.status(400).json({ status: 400, statusMessage: 'Missing Parameters', error: 'Missing required parameters' })
-      }
+      // UUID verification
+      if (!isValidUuid(turnId)) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'Invalid turn ID provided' })
+      if (!isValidUuid(serviceId)) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'Invalid service ID provided' })
+      if (!isValidUuid(userId)) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'Invalid user ID provided' })
 
       const turn = await this.turnModel.request({ turnId, userId, serviceId })
 
@@ -130,9 +139,7 @@ export class TurnController {
     try {
       const userId = req.user.id
 
-      if (!userId) {
-        return res.status(400).json({ status: 400, statusMessage: 'Missing Parameters', error: 'Missing required parameters' })
-      }
+      if (!isValidUuid(userId)) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'Invalid user ID provided' })
 
       const turns = await this.turnModel.getUserTurns({ userId })
 
@@ -153,6 +160,10 @@ export class TurnController {
       const turnId = req.params.id
       const userId = req.user.id
 
+      // UUID verification
+      if (!isValidUuid(userId)) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'Invalid user ID provided' })
+      if (!isValidUuid(turnId)) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'Invalid turn ID provided' })
+
       await this.turnModel.cancel({ turnId, userId })
 
       return res.status(200).json({ status: 200, statusMessage: 'Success' })
@@ -161,8 +172,8 @@ export class TurnController {
         return res.status(404).json({ status: 404, statusMessage: 'Not Found', error: error.message })
       }
 
-      if (error instanceof ForBiddenError) {
-        return res.status(403).json({ status: 403, statusMessage: 'For Bidden Error', error: error.message })
+      if (error instanceof UnauthorizedError) {
+        return res.status(401).json({ status: 401, statusMessage: 'Unauthorized', error: error.message })
       }
 
       if (error instanceof ConnectionError) {

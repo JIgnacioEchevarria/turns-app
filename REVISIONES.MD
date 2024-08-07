@@ -117,3 +117,8 @@
 - Falta terminar la documentación de la API REST con swagger
 - Verificar ejemplos de la documentación, si conviene dejar ejemplos reales o con types.
 - Buscar si hay alguna manera de especificar mas validaciones en swagger, como un minimo de letras y demas.
+
+
+### Revisión 7/8/2024
+- Terminada la documentacion de la API
+- Verificar que ande todo, ya verifique la de servicios y los 3 primeros endpoints de turnos.

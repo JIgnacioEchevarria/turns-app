@@ -20,7 +20,7 @@ export const turnErrorMessages = (message) => {
   if (message === 'There are no turns available for the selected day') return 'No hay turnos disponibles para el día seleccionado'
   if (message === 'Turn not available') return 'El turno no esta disponible'
   if (message === 'You cannot cancel the turn because the time limit has been exceeded') return 'No puedes cancelar el turno, debes hacerlo 24 horas antes del mismo'
-  if (message === 'Invalid calendar settings') return 'La configuración del calendario es inválida, por favor verifica tus ajustes y vuelve a intentarlo'
+  if (message === 'Invalid time slots') return 'La configuración del calendario es inválida, por favor verifica tus ajustes y vuelve a intentarlo'
   return 'Ha ocurrido un error inesperado, intente de nuevo más tarde'
 }
 
