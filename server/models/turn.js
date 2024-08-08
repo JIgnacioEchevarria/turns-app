@@ -251,12 +251,11 @@ export class TurnModel {
 
       if (turn.rowCount === 0) throw new NotFoundError('Turn not found')
 
-      const turnDate = dayjs(turn.rows[0].date_time).utc().format('YYYY-MM-DD HH:mm:ss')
-      const currentDate = dayjs().utc().format('YYYY-MM-DD HH:mm:ss')
+      const turnDate = dayjs(turn.rows[0].date_time).utc()
+      const currentDate = dayjs().utc()
       const diffHours = turnDate.diff(currentDate, 'hour')
-      console.log(diffHours)
 
-      if (diffHours <= 24) throw new UnauthorizedError('You cannot cancel the turn because the time limit has been exceeded')
+      if (diffHours < 24) throw new UnauthorizedError('You cannot cancel the turn because the time limit has been exceeded')
 
       await pool.query(
         `UPDATE turns SET available = true, user_id = null, service_id = null
