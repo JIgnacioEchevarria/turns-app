@@ -252,7 +252,9 @@ export class TurnModel {
       if (turn.rowCount === 0) throw new NotFoundError('Turn not found')
 
       const turnDate = dayjs(turn.rows[0].date_time)
+      console.log(turnDate)
       const currentDate = dayjs()
+      console.log(currentDate)
       const diffHours = turnDate.diff(currentDate, 'hour')
 
       if (diffHours <= 24) throw new UnauthorizedError('You cannot cancel the turn because the time limit has been exceeded')
