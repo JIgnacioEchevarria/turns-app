@@ -1,5 +1,6 @@
 import { AlreadyExistsError, ConnectionError, NotAvailableError, NotFoundError } from '../errors.js'
 import { validatePartialService, validateService } from '../schemes/schemes.js'
+import { isValidUuid } from '../utils/validation.js'
 
 export class ServiceController {
   constructor ({ serviceModel }) {
@@ -57,6 +58,8 @@ export class ServiceController {
     try {
       const id = req.params.id
 
+      if (!isValidUuid(id)) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'Invalid service ID provided' })
+
       await this.serviceModel.delete({ id })
       return res.status(200).json({ status: 200, statusMessage: 'Success' })
     } catch (error) {
@@ -87,6 +90,8 @@ export class ServiceController {
 
       const id = req.params.id
       const info = result.data
+
+      if (!isValidUuid(id)) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'Invalid service ID provided' })
 
       const updatedService = await this.serviceModel.update({ id, info })
 

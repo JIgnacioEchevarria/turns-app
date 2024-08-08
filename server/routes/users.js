@@ -30,8 +30,11 @@ export const createUserRouter = ({ userModel }) => {
    *        password:
    *          type: string
    *          format: password
+   *          minLength: 8
    *        phone_number:
    *          type: string
+   *          minLength: 9
+   *          maxLength: 11
    *        role:
    *          type: string
    *          default: "client"
@@ -42,8 +45,8 @@ export const createUserRouter = ({ userModel }) => {
    *        - phone_number
    *      example:
    *        id_user: "545d029b-0b2c-4099-9b91-c3a9dc6b1231"
-   *        name: "OscarLopez33"
-   *        email: "example@example.com"
+   *        name: "steveJobs33"
+   *        email: "steve33@example.com"
    *        password: "password123"
    *        phone_number: "2678902345"
    *        role: "client"
@@ -144,11 +147,15 @@ export const createUserRouter = ({ userModel }) => {
    *                password:
    *                  type: string
    *                  format: password
+   *                  minLength: 8
    *                passwordConfirm:
    *                  type: string
    *                  format: password
+   *                  minLength: 8
    *                phoneNum:
    *                  type: string
+   *                  minLength: 9
+   *                  maxLength: 11
    *              required:
    *                - name
    *                - email
@@ -156,8 +163,8 @@ export const createUserRouter = ({ userModel }) => {
    *                - passwordConfirm
    *                - phoneNum
    *              example:
-   *                name: "New Username"
-   *                email: "example@example.com"
+   *                name: "jhonDutch"
+   *                email: "jdutchrd2@example.com"
    *                password: "password123"
    *                passwordConfirm: "password123"
    *                phoneNum: "2389092370"
@@ -212,6 +219,25 @@ export const createUserRouter = ({ userModel }) => {
    *                  statusMessage:
    *                    type: string
    *                    example: "Already Exists"
+   *                  error:
+   *                    type: string
+   *                    example: "There is already a user with that username"
+   *        400:
+   *          description: Bad Request
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 400
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Syntax Error"
+   *                  error:
+   *                    type: string
+   *                    example: "Invalid object JSON provided"
    *        500:
    *          description: Failed Connection
    *          content:
@@ -250,8 +276,10 @@ export const createUserRouter = ({ userModel }) => {
    *                  type: string
    *                phoneNum:
    *                  type: string
+   *                  minLength: 9
+   *                  maxLength: 11
    *              example:
-   *                name: "Updated username"
+   *                name: "jDutch"
    *                phoneNum: "5647901287"
    *      responses:
    *        200:
@@ -275,13 +303,17 @@ export const createUserRouter = ({ userModel }) => {
    *                        format: uuid
    *                      name:
    *                        type: string
+   *                        example: "jDutch"
    *                      email:
    *                        type: string
    *                        format: email
+   *                        example: "jdutchrd2@example.com"
    *                      phoneNumber:
    *                        type: string
+   *                        example: "5647901287"
    *                      role:
    *                        type: string
+   *                        example: "client"
    *        403:
    *          description: Access not authorized
    *          content:
@@ -320,7 +352,7 @@ export const createUserRouter = ({ userModel }) => {
    *                          type: string
    *                          example: "name must be a string"
    *        400:
-   *          description: Missing parameters
+   *          description: Bad Request
    *          content:
    *            application/json:
    *              schema:
@@ -331,10 +363,10 @@ export const createUserRouter = ({ userModel }) => {
    *                    example: 400
    *                  statusMessage:
    *                    type: string
-   *                    example: "Missing Parameters"
+   *                    example: "Bad Request"
    *                  error:
    *                    type: string
-   *                    example: "Missing required parameters"
+   *                    example: "Invalid user ID provided"
    *        404:
    *          description: User not found
    *          content:
@@ -364,6 +396,9 @@ export const createUserRouter = ({ userModel }) => {
    *                  statusMessage:
    *                    type: string
    *                    example: "Already Exists"
+   *                  error:
+   *                    type: string
+   *                    example: "There is already a user with that username"
    *        500:
    *          description: Failed Connection
    *          content:
@@ -413,13 +448,17 @@ export const createUserRouter = ({ userModel }) => {
    *                        format: uuid
    *                      name:
    *                        type: string
+   *                        example: "jDutch"
    *                      email:
    *                        type: string
    *                        format: email
+   *                        example: "jdutchrd2@example.com"
    *                      phone_number:
    *                        type: string
+   *                        example: "5647901287"
    *                      role:
    *                        type: string
+   *                        example: "client"
    *        403:
    *          description: Access not authorized
    *          content:
@@ -434,7 +473,7 @@ export const createUserRouter = ({ userModel }) => {
    *                    type: string
    *                    example: "Access Not Authorized"
    *        400:
-   *          description: Missing parameters
+   *          description: Bad Request
    *          content:
    *            application/json:
    *              schema:
@@ -445,10 +484,10 @@ export const createUserRouter = ({ userModel }) => {
    *                    example: 400
    *                  statusMessage:
    *                    type: string
-   *                    example: "Missing Parameters"
+   *                    example: "Bad Request"
    *                  error:
    *                    type: string
-   *                    example: "Missing required parameters"
+   *                    example: "Invalid user ID provided"
    *        404:
    *          description: User not found
    *          content:
@@ -501,18 +540,21 @@ export const createUserRouter = ({ userModel }) => {
    *              properties:
    *                currentPassword:
    *                  type: string
+   *                  minLength: 8
    *                newPassword:
    *                  type: string
+   *                  minLength: 8
    *                passwordConfirm:
    *                  type: string
+   *                  minLength: 8
    *              required:
    *                - currentPassword
    *                - newPassword
    *                - passwordConfirm
    *              example:
-   *                currentPassword: "currentpassword"
-   *                newPassword: "newpassword"
-   *                passwordConfirm: "confirmpassword"
+   *                currentPassword: "password123"
+   *                newPassword: "12345pass"
+   *                passwordConfirm: "12345pass"
    *      responses:
    *        200:
    *          description: Password updated successfully
@@ -565,7 +607,7 @@ export const createUserRouter = ({ userModel }) => {
    *                          type: string
    *                          example: "Passwords do not match"
    *        400:
-   *          description: Missing parameters
+   *          description: Bad Request
    *          content:
    *            application/json:
    *              schema:
@@ -576,10 +618,10 @@ export const createUserRouter = ({ userModel }) => {
    *                    example: 400
    *                  statusMessage:
    *                    type: string
-   *                    example: "Missing Parameters"
+   *                    example: "Bad Request"
    *                  error:
    *                    type: string
-   *                    example: "Missing required parameters"
+   *                    example: "Invalid user ID provided"
    *        404:
    *          description: User not found
    *          content:
@@ -651,6 +693,9 @@ export const createUserRouter = ({ userModel }) => {
    *                  format: uuid
    *                role:
    *                  type: string
+   *                  enum:
+   *                    - client
+   *                    - admin
    *              required:
    *                - id
    *                - role
@@ -758,8 +803,8 @@ export const createUserRouter = ({ userModel }) => {
    *                - email
    *                - password
    *              example:
-   *                email: "example@example.com"
-   *                password: "password"
+   *                email: "jdutchrd2@example.com"
+   *                password: "password123"
    *      responses:
    *        200:
    *          description: Successfull login
@@ -783,17 +828,41 @@ export const createUserRouter = ({ userModel }) => {
    *                        example: "ed205999-b6ea-417b-8bfc-a3eb9a603b1a"
    *                      name:
    *                        type: string
-   *                        example: "JuanPerez45"
+   *                        example: "jDutch"
    *                      email:
    *                        type: string
    *                        format: email
-   *                        example: "example@example.com"
+   *                        example: "jdutchrd2@example.com"
    *                      phoneNumber:
    *                        type: string
-   *                        example: "2344899075"
+   *                        example: "2389092370"
    *                      role:
    *                        type: string
    *                        example: "client"
+   *        422:
+   *          description: Validation error
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 422
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Validation Error"
+   *                  error:
+   *                    type: array
+   *                    items:
+   *                      type: object
+   *                      properties:
+   *                        field:
+   *                          type: string
+   *                          example: "password"
+   *                        message:
+   *                          type: string
+   *                          example: "Passwords do not match"
    *        401:
    *          description: Incorrect password
    *          content:
@@ -810,6 +879,22 @@ export const createUserRouter = ({ userModel }) => {
    *                  error:
    *                    type: string
    *                    example: "Incorrect password"
+   *        400:
+   *          description: Bad Request
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 400
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Syntax Error"
+   *                  error:
+   *                    type: string
+   *                    example: "Invalid object JSON provided"
    *        500:
    *          description: Failed Connection
    *          content:

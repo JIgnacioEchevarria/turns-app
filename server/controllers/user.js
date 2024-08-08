@@ -1,6 +1,6 @@
 import { AlreadyExistsError, ConnectionError, InvalidCredentialsError, NotFoundError } from '../errors.js'
 import { validatePartialUser, validatePassword, validateUser } from '../schemes/schemes.js'
-import { isValidRole } from '../utils/validation.js'
+import { isValidRole, isValidUuid } from '../utils/validation.js'
 
 export class UserController {
   constructor ({ userModel }) {
@@ -29,9 +29,7 @@ export class UserController {
     try {
       const id = req.user.id
 
-      if (!id) {
-        return res.status(400).json({ status: 400, statusMessage: 'Missing Parameters', error: 'Missing required parameters' })
-      }
+      if (!isValidUuid(id)) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'Invalid user ID provided' })
 
       const user = await this.userModel.getById({ id })
       return res.status(200).json({ status: 200, statusMessage: 'Success', data: user })
@@ -72,6 +70,7 @@ export class UserController {
 
       return res.status(201).json({ status: 201, statusMessage: 'Successful Registration' })
     } catch (error) {
+      console.log(error)
       if (error instanceof AlreadyExistsError) {
         return res.status(409).json({ status: 409, statusMessage: 'Already Exists', error: error.message })
       }
@@ -85,7 +84,20 @@ export class UserController {
   // Inicio de sesión
   login = async (req, res) => {
     try {
-      const { email, password } = req.body
+      const result = validatePartialUser(req.body)
+
+      if (!result.success) {
+        return res.status(422).json({
+          status: 422,
+          statusMessage: 'Validation Error',
+          error: result.error.errors.map(e => ({
+            field: e.path[0],
+            message: e.message
+          }))
+        })
+      }
+
+      const { email, password } = result.data
 
       const { token, userLogged } = await this.userModel.login({ email, password })
       res.cookie('access_token', token, {
@@ -137,9 +149,7 @@ export class UserController {
 
       const id = req.user.id
 
-      if (!id) {
-        return res.status(400).json({ status: 400, statusMessage: 'Missing Parameters', error: 'Missing required parameters' })
-      }
+      if (!isValidUuid(id)) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'Invalid user ID provided' })
 
       const updatedUser = await this.userModel.update({ id, info: result.data })
 
@@ -177,9 +187,7 @@ export class UserController {
 
       const id = req.user.id
 
-      if (!id) {
-        return res.status(400).json({ status: 400, statusMessage: 'Missing Parameters', error: 'Missing required parameters' })
-      }
+      if (!isValidUuid(id)) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'Invalid user ID provided' })
 
       const { currentPassword, newPassword, passwordConfirm } = result.data
 
@@ -214,9 +222,9 @@ export class UserController {
       const info = req.body
       const userId = req.user.id
 
-      if (userId === info.id) return res.status(403).json({ status: 403, statusMessage: 'Access Not Authorized' })
+      if (!isValidUuid(userId) || !isValidUuid(info.id)) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'Invalid user ID provided' })
 
-      if (!info.id || !info.role) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'ID and ROLE attributes are required' })
+      if (userId === info.id) return res.status(403).json({ status: 403, statusMessage: 'Access Not Authorized' })
 
       if (!isValidRole(info.role)) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'Invalid role provided' })
 

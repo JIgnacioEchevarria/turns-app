@@ -25,9 +25,11 @@ export const createServiceRouter = ({ serviceModel }) => {
    *          type: string
    *        duration:
    *          type: integer
+   *          minimum: 1
    *          decription: duration of service in minutes
    *        price:
    *          type: integer
+   *          minimum: 1
    *        is_active:
    *          type: boolean
    *          default: true
@@ -121,8 +123,10 @@ export const createServiceRouter = ({ serviceModel }) => {
    *                  type: string
    *                duration:
    *                  type: integer
+   *                  minimum: 1
    *                price:
    *                  type: integer
+   *                  minimum: 1
    *              required:
    *                - name
    *                - duration
@@ -201,6 +205,22 @@ export const createServiceRouter = ({ serviceModel }) => {
    *                  error:
    *                    type: string
    *                    example: "The service already exists"
+   *        400:
+   *          description: Bad Request
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 400
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Syntax Error"
+   *                  error:
+   *                    type: string
+   *                    example: "Invalid object JSON provided"
    *        500:
    *          description: Failed Connection
    *          content:
@@ -218,7 +238,7 @@ export const createServiceRouter = ({ serviceModel }) => {
    *                    type: string
    *                    example: "Database is not available"
   */
-  serviceRouter.post('/', validateAccessToken, isAdmin, serviceController.create)
+  serviceRouter.post('/', serviceController.create)
 
   /**
    * @swagger
@@ -263,6 +283,22 @@ export const createServiceRouter = ({ serviceModel }) => {
    *                  statusMessage:
    *                    type: string
    *                    example: "Access Not Authorized"
+   *        400:
+   *          description: Bad Request
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 400
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Bad Request"
+   *                  error:
+   *                    type: string
+   *                    example: "Invalid service ID provided"
    *        404:
    *          description: Service not found
    *          content:
@@ -325,8 +361,10 @@ export const createServiceRouter = ({ serviceModel }) => {
    *                  type: string
    *                duration:
    *                  type: integer
+   *                  minimum: 1
    *                price:
    *                  type: integer
+   *                  minimum: 1
    *              example:
    *                name: "Hair and beard cut"
    *                duration: 60
@@ -361,6 +399,22 @@ export const createServiceRouter = ({ serviceModel }) => {
    *                  statusMessage:
    *                    type: string
    *                    example: "Access Not Authorized"
+   *        400:
+   *          description: Bad Request
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 400
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Bad Request"
+   *                  error:
+   *                    type: string
+   *                    example: "Invalid service ID provided"
    *        422:
    *          description: Validation error
    *          content:

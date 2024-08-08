@@ -135,8 +135,8 @@ export const createTurnRouter = ({ turnModel }) => {
    *                  statusMessage:
    *                    type: string
    *                    example: "Access Not Authorized"
-   *        422:
-   *          description: Invalid date format
+   *        400:
+   *          description: Bad Request
    *          content:
    *            application/json:
    *              schema:
@@ -144,10 +144,10 @@ export const createTurnRouter = ({ turnModel }) => {
    *                properties:
    *                  status:
    *                    type: integer
-   *                    example: 422
+   *                    example: 400
    *                  statusMessage:
    *                    type: string
-   *                    example: "Validation Error"
+   *                    example: "Bad Request"
    *                  error:
    *                    type: string
    *                    example: "Invalid date format"
@@ -263,7 +263,7 @@ export const createTurnRouter = ({ turnModel }) => {
    *                    type: string
    *                    example: "Access Not Authorized"
    *        400:
-   *          description: Invalid UUID
+   *          description: Bad Request
    *          content:
    *            application/json:
    *              schema:
@@ -363,8 +363,8 @@ export const createTurnRouter = ({ turnModel }) => {
    *                          type: string
    *                          format: time
    *                          example: "05:00:00"
-   *        422:
-   *          description: Invalid date format
+   *        400:
+   *          description: Bad Request
    *          content:
    *            application/json:
    *              schema:
@@ -372,10 +372,10 @@ export const createTurnRouter = ({ turnModel }) => {
    *                properties:
    *                  status:
    *                    type: integer
-   *                    example: 422
+   *                    example: 400
    *                  statusMessage:
    *                    type: string
-   *                    example: "Validation Error"
+   *                    example: "Bad Request"
    *                  error:
    *                    type: string
    *                    example: "Invalid date format"
@@ -501,6 +501,22 @@ export const createTurnRouter = ({ turnModel }) => {
    *                        message:
    *                          type: string
    *                          example: "Invalid time slots"
+   *        400:
+   *          description: Bad Request
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 400
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Syntax Error"
+   *                  error:
+   *                    type: string
+   *                    example: "Invalid object JSON provided"
    *        500:
    *          description: Failed Connection
    *          content:
@@ -535,6 +551,7 @@ export const createTurnRouter = ({ turnModel }) => {
    *          schema:
    *            type: string
    *            format: uuid
+   *            example: "ed205999-b6ea-417b-8bfc-a3eb9a603b1a"
    *          description: Unique ID of turn
    *        - in: query
    *          name: idService
@@ -542,6 +559,7 @@ export const createTurnRouter = ({ turnModel }) => {
    *          schema:
    *            type: string
    *            format: uuid
+   *            example: "ed205999-b6ea-417b-8bfc-a3eb9a603b1a"
    *          description: Unique ID of service
    *      responses:
    *        200:
@@ -590,7 +608,7 @@ export const createTurnRouter = ({ turnModel }) => {
    *                    type: string
    *                    example: "Access Not Authorized"
    *        400:
-   *          description: Invalid UUID
+   *          description: Bad Request
    *          content:
    *            application/json:
    *              schema:
@@ -655,6 +673,7 @@ export const createTurnRouter = ({ turnModel }) => {
    *          schema:
    *            type: string
    *            format: uuid
+   *            example: "ed205999-b6ea-417b-8bfc-a3eb9a603b1a"
    *          description: Unique ID of the turn you want to cancel
    *      responses:
    *        200:
@@ -684,7 +703,7 @@ export const createTurnRouter = ({ turnModel }) => {
    *                    type: string
    *                    example: "Access Not Authorized"
    *        400:
-   *          description: Invalid UUID
+   *          description: Bad Request
    *          content:
    *            application/json:
    *              schema:

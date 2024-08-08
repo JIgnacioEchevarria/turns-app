@@ -15,6 +15,10 @@ export class TurnController {
     try {
       const date = req.params.date
 
+      const format = 'YYYY-MM-DD'
+
+      if (!dayjs(date, format, true).isValid()) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'Invalid date format' })
+
       const turns = await this.turnModel.getAll({ date })
 
       return res.status(200).json({ status: 200, statusMessage: 'Success', data: turns })
@@ -35,7 +39,7 @@ export class TurnController {
 
       const format = 'YYYY-MM-DD'
 
-      if (!dayjs(date, format, true).isValid()) return res.status(422).json({ status: 422, statusMessage: 'Validation Error', error: 'Invalid date format' })
+      if (!dayjs(date, format, true).isValid()) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'Invalid date format' })
 
       const turns = await this.turnModel.getTurnsByDate({ date })
 

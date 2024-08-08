@@ -8,6 +8,7 @@ import { UserModel } from './models/user.js'
 import { ServiceModel } from './models/service.js'
 import { TurnModel } from './models/turn.js'
 import { setupSwagger } from './swagger.js'
+import { syntaxMiddleware } from './middlewares/syntax.js'
 
 const app = express()
 
@@ -15,6 +16,7 @@ const app = express()
 app.use(json())
 app.use(corsMiddleware())
 app.use(cookieParser())
+app.use(syntaxMiddleware()) // Catch syntax errors in objects
 app.disable('x-powered-by')
 
 // Swagger

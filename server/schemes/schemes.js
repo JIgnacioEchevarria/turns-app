@@ -27,11 +27,11 @@ const serviceSchema = z.object({
   duration: z.number({
     invalid_type_error: 'duration must be a number',
     required_error: 'duration is required'
-  }).positive(),
+  }).min(1),
   price: z.number({
     invalid_type_error: 'price must be a number',
     required_error: 'price is required'
-  }).positive()
+  }).min(1)
 })
 
 const passwordSchema = z.object({
