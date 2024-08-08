@@ -1,7 +1,11 @@
 import { pool } from '../database/connectionPostgreSQL.js'
 import dayjs from 'dayjs'
-import moment from 'moment-timezone'
+import utc from 'dayjs/plugin/utc.js'
+import timezone from 'dayjs/plugin/timezone.js'
 import { ConnectionError, UnauthorizedError, NotAvailableError, NotFoundError } from '../errors.js'
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 export class TurnModel {
   static async getAll ({ date }) {
@@ -20,9 +24,9 @@ export class TurnModel {
 
       const turnsWithLocalTime = turns.rows.map(turn => ({
         ...turn,
-        date_time: moment(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss'),
-        date: moment(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD'),
-        time: moment(turn.date_time).tz('America/Argentina/Buenos_Aires').format('HH:mm')
+        date_time: dayjs(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss'),
+        date: dayjs(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD'),
+        time: dayjs(turn.date_time).tz('America/Argentina/Buenos_Aires').format('HH:mm')
       }))
 
       return turnsWithLocalTime
@@ -35,7 +39,7 @@ export class TurnModel {
 
   static async getTurnsByDate ({ date }) {
     const currentDate = dayjs().format('YYYY-MM-DD')
-    const timeLimit = dayjs().add(12, 'hour').second(0).millisecond(0).format('YYYY-MM-DD HH:mm:ss')
+    const timeLimit = dayjs().utc().add(12, 'hour').second(0).millisecond(0).format('YYYY-MM-DD HH:mm:ss')
 
     try {
       const turns = await pool.query(
@@ -53,9 +57,9 @@ export class TurnModel {
 
       const turnsWithLocalTime = turns.rows.map(turn => ({
         ...turn,
-        date_time: moment(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss'),
-        date: moment(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD'),
-        time: moment(turn.date_time).tz('America/Argentina/Buenos_Aires').format('HH:mm')
+        date_time: dayjs(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss'),
+        date: dayjs(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD'),
+        time: dayjs(turn.date_time).tz('America/Argentina/Buenos_Aires').format('HH:mm')
       }))
 
       return turnsWithLocalTime
@@ -75,7 +79,7 @@ export class TurnModel {
 
       const turnsWithLocalTime = turns.rows.map(turn => ({
         ...turn,
-        date_time: moment(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss')
+        date_time: dayjs(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss')
       }))
 
       return turnsWithLocalTime
@@ -163,7 +167,7 @@ export class TurnModel {
 
   static async request ({ turnId, userId, serviceId }) {
     const currentDate = dayjs().format('YYYY-MM-DD')
-    const timeLimit = dayjs().add(12, 'hour').second(0).millisecond(0).format('YYYY-MM-DD HH:mm:ss')
+    const timeLimit = dayjs().utc().add(12, 'hour').second(0).millisecond(0).format('YYYY-MM-DD HH:mm:ss')
 
     try {
       const turns = await pool.query(
@@ -192,7 +196,7 @@ export class TurnModel {
       )
 
       return {
-        date_time: moment(turn.rows[0].date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss'),
+        date_time: dayjs(turn.rows[0].date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss'),
         id_turn: turn.rows[0].id_turn,
         id_user: turn.rows[0].id_user,
         id_service: turn.rows[0].id_service
@@ -220,9 +224,9 @@ export class TurnModel {
 
       const turnsWithLocalTime = turns.rows.map(turn => ({
         ...turn,
-        date_time: moment(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss'),
-        date: moment(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD'),
-        time: moment(turn.date_time).tz('America/Argentina/Buenos_Aires').format('HH:mm')
+        date_time: dayjs(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss'),
+        date: dayjs(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD'),
+        time: dayjs(turn.date_time).tz('America/Argentina/Buenos_Aires').format('HH:mm')
       }))
 
       return turnsWithLocalTime

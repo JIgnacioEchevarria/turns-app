@@ -16,6 +16,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import dayjs from 'dayjs'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Calendar } from 'react-date-range'
+import { FormErrorMessage } from '../components/FormErrorMessage.jsx'
 
 export const TurnsPage = () => {
   const [selectedDate, setSelectedDate] = useState()
@@ -79,6 +80,7 @@ export const ServicesPage = () => {
 
   const handleToggleModalTurn = () => {
     setIsOpenModalService(prevState => !prevState)
+    resetServiceErrors()
   }
 
   const handleClosePopUp = () => {
@@ -237,6 +239,7 @@ export const SettingsPage = () => {
   }, [daysOfWeek])
 
   const calendarError = turnError && turnError.statusMessage === 'Validation Error' && turnError.error.find(e => e.field === 'timeSlots')
+  const intervalError = turnError && turnError.statusMessage === 'Validation Error' && turnError.error.find(e => e.field === 'interval')
 
   return (
     <div className='settings-page'>
@@ -287,6 +290,7 @@ export const SettingsPage = () => {
         <div className='form-attention-schedule-item'>
           <label className='input-label' htmlFor="interval-turns">Intervalo de tiempo entre cada turno</label>
           <input required placeholder='En minutos' type="number" name="interval-turns" id="interval-turns" />
+          {intervalError && <FormErrorMessage message={intervalError.message} />}
         </div>
         <div className='form-attention-schedule-item'>
           <label className='input-label'>Configuración válida hasta</label>

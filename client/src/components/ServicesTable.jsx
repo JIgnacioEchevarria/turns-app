@@ -16,6 +16,7 @@ import { useUserStore } from '../store/user'
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
 import CloseIcon from '@mui/icons-material/Close'
 import DoneIcon from '@mui/icons-material/Done'
+import { serviceErrorMessages } from '../constants/messages.js'
 
 export default function ServicesTable () {
   const services = useServiceStore(state => state.services)
@@ -24,6 +25,7 @@ export default function ServicesTable () {
   const editService = useServiceStore(state => state.editService)
   const logout = useUserStore(state => state.logout)
   const navigate = useNavigate()
+  const serviceError = useServiceStore(state => state.serviceError)
 
   const [editCell, setEditCell] = useState({ row: null })
   const [fieldsValues, setFieldsValues] = useState({ name: '', duration: '', price: '' })
@@ -80,6 +82,9 @@ export default function ServicesTable () {
     if (e.key === 'Enter') handleSaveChanges(serviceId, fieldsValues)
   }
 
+  const durationError = serviceError && serviceError.statusMessage === 'Validation Error' && serviceError.error.find(e => e.field === 'duration')
+  const priceError = serviceError && serviceError.statusMessage === 'Validation Error' && serviceError.error.find(e => e.field === 'price')
+
   return (
     <>
     {services.length > 0
@@ -119,6 +124,8 @@ export default function ServicesTable () {
                                   value={fieldsValues.duration}
                                   onChange={(e) => handleChangeInput(e, 'duration')}
                                   onKeyDown={(e) => handleKeyPress(e, service.id)}
+                                  error={Boolean(durationError)}
+                                  helperText={durationError && serviceErrorMessages(durationError.message)}
                                 />
                               </TableCell>
                             : <TableCell sx={{ fontSize: '1rem' }} align="center">{turnDuration(service.duration)}</TableCell>
@@ -130,6 +137,8 @@ export default function ServicesTable () {
                                   value={fieldsValues.price}
                                   onChange={(e) => handleChangeInput(e, 'price')}
                                   onKeyDown={(e) => handleKeyPress(e, service.id)}
+                                  error={Boolean(priceError)}
+                                  helperText={priceError && serviceErrorMessages(priceError.message)}
                                 />
                               </TableCell>
                             : <TableCell sx={{ fontSize: '1rem' }} align="center">${service.price}</TableCell>

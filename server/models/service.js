@@ -25,14 +25,14 @@ export class ServiceModel {
 
     try {
       const service = await pool.query(
-        `SELECT COUNT(*) AS count
+        `SELECT *
           FROM services
           WHERE name = $1
           AND is_active = true;`,
         [name]
       )
 
-      if (service.rows[0].count > 0) throw new AlreadyExistsError('The service already exists')
+      if (service.rowCount > 0) throw new AlreadyExistsError('The service already exists')
 
       const result = await pool.query(
         `INSERT INTO services (name, duration, price)
@@ -97,7 +97,7 @@ export class ServiceModel {
 
       if (name) {
         const existingService = await pool.query(
-          `SELECT COUNT(*) AS count
+          `SELECT *
             FROM services
             WHERE name = $1
             AND id_service != $2
@@ -105,7 +105,7 @@ export class ServiceModel {
           [name, id]
         )
 
-        if (existingService.rows[0].count > 0) throw new AlreadyExistsError('The service already exists')
+        if (existingService.rowCount > 0) throw new AlreadyExistsError('The service already exists')
       }
 
       // Se crean dos arrays, uno para los campos, y otro para los parametros.

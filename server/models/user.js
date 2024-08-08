@@ -45,21 +45,23 @@ export class UserModel {
 
     try {
       const nameVerification = await pool.query(
-        `SELECT COUNT(*) AS count
+        `SELECT *
           FROM users
           WHERE name = $1;`,
         [name]
       )
+      console.log(nameVerification)
 
       const emailVerification = await pool.query(
-        `SELECT COUNT(*) AS count
+        `SELECT *
           FROM users
           WHERE email = $1;`,
         [email]
       )
+      console.log(name)
 
-      if (nameVerification.rows > 0) throw new AlreadyExistsError('There is already a user with that username')
-      if (emailVerification.rows > 0) throw new AlreadyExistsError('There is already a user with that email')
+      if (nameVerification.rowCount > 0) throw new AlreadyExistsError('There is already a user with that username')
+      if (emailVerification.rowCount > 0) throw new AlreadyExistsError('There is already a user with that email')
 
       const hashedPassword = await bcrypt.hash(password, 10)
 
@@ -125,14 +127,14 @@ export class UserModel {
       const { name, phoneNum } = info
 
       const nameVerification = await pool.query(
-        `SELECT COUNT(*) AS count
+        `SELECT *
           FROM users
           WHERE name = $1
           AND id_user != $2;`,
         [name, id]
       )
 
-      if (parseInt(nameVerification.rows[0].count) > 0) throw new AlreadyExistsError('There is already a user with that username')
+      if (parseInt(nameVerification.rowCount) > 0) throw new AlreadyExistsError('There is already a user with that username')
 
       // Se crean dos arrays, uno para los campos, y otro para los parametros.
       const updatedFields = []

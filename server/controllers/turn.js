@@ -60,6 +60,10 @@ export class TurnController {
       const calendarSettings = req.body
       const { attentionSchedule, interval, deadline } = calendarSettings
 
+      const format = 'YYYY-MM-DD'
+
+      if (!dayjs(deadline, format, true).isValid()) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'Invalid date format' })
+
       // Valido intervalos de timpo entre turnos y fecha límite de la configuración
       const result = validateCalendar({ interval, deadline })
       if (!result.success) {

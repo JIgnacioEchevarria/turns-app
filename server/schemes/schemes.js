@@ -53,7 +53,7 @@ const calendarSchema = z.object({
   interval: z.number({
     invalid_type_error: 'Interval must be a number',
     required_error: 'Interval is required'
-  }),
+  }).min(1),
   deadline: z.string({
     invalid_type_error: 'Deadline must be a string',
     required_error: 'Deadline is required'
