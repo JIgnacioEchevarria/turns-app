@@ -5,6 +5,7 @@ import { Box, IconButton } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
 import dayjs from 'dayjs'
+import { translateDay } from '../utils/turnUtils'
 
 export const TimeSlotInput = ({ day, checked, timeSlots, onCheck, onAddSlot, onRemoveSlot, onChangeTime, onCopySlots }) => {
   return (
@@ -12,7 +13,7 @@ export const TimeSlotInput = ({ day, checked, timeSlots, onCheck, onAddSlot, onR
       <FormControlLabel
         sx={{ display: 'flex', flexDirection: 'column', margin: 0 }}
         control={<Checkbox onChange={onCheck} />}
-        label={day}
+        label={translateDay(day)}
       />
       {timeSlots.map((slot, index) => (
         <Box key={index} sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>

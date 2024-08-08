@@ -11,3 +11,14 @@ export const turnDuration = (duration) => {
   // Devuelve la hora con los minutos.
   return `${hours}:${minutes} hs`
 }
+
+export const translateDay = (day) => {
+  if (day === 'Monday') return 'Lunes'
+  if (day === 'Tuesday') return 'Martes'
+  if (day === 'Wednesday') return 'Miercoles'
+  if (day === 'Thursday') return 'Jueves'
+  if (day === 'Friday') return 'Viernes'
+  if (day === 'Saturday') return 'Sábado'
+  if (day === 'Sunday') return 'Domingo'
+  return day
+}
