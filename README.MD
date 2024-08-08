@@ -132,4 +132,4 @@ Puedes ver la documentación de la API: [Sistema de Gestión de Turnos - API](ht
 Si tienes alguna pregunta o comentario sobre el proyecto, no dudes en ponerte en contacto conmigo:
 
 - **Email**: echevarriajignacio@gmail.com
-
+- [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/juan-ignacio-echevarria-524356322/)
