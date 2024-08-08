@@ -11,7 +11,7 @@ La aplicación cuenta con dos tipos de usuarios con diferentes niveles de acceso
 El objetivo principal del proyecto es dar una solución simple para la administración de turnos, perimitiendo a los usuarios finales solicitar turnos y a los administradores gestionar la disponibilidad de turnos y servicios de manera sencilla y organizada.
 ## Demo
 
-Puedes probar la aplicación en vivo aquí: [Sistema de Gestión de Turnos - Demo](https://jieturnos.vercel.app)
+Puedes probar la aplicación en vivo aquí: [Sistema de Gestión de Turnos - Demo](https://jieturns.vercel.app/)
 
 ### Cuentas de prueba
 Para explorar la aplicación desde diferentes perspectivas, usa laas siguientes credenciales de prueba:
@@ -122,6 +122,12 @@ Ejecutar el frontend:
 npm run dev
 ```
 La aplicación frontend debería estar corriendo en http://localhost:5173 por defecto.
+## Documentación de la API
+
+Puedes ver la documentación de la API: [Sistema de Gestión de Turnos - API](https://turns-app.onrender.com/api/v1/docs/)
+
+
+
 ## Contacto
 Si tienes alguna pregunta o comentario sobre el proyecto, no dudes en ponerte en contacto conmigo:
 
