@@ -189,17 +189,27 @@ export class TurnModel {
       )
 
       const turn = await pool.query(
-        `SELECT id_turn, user_id AS id_user, service_id AS id_service, date_time
-          FROM turns
+        `SELECT t.id_turn, u.id_user, s.id_service, t.date_time, u.email, u.name, u.phone_number, s.name AS service, s.duration, s.price
+          FROM turns t
+          INNER JOIN services s ON t.service_id = s.id_service
+          INNER JOIN users u ON t.user_id = u.id_user
           WHERE id_turn = $1;`,
         [turnId]
       )
 
       return {
         date_time: dayjs(turn.rows[0].date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss'),
+        date: dayjs(turn.rows[0].date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD'),
+        time: dayjs(turn.rows[0].date_time).tz('America/Argentina/Buenos_Aires').format('HH:mm'),
         id_turn: turn.rows[0].id_turn,
         id_user: turn.rows[0].id_user,
-        id_service: turn.rows[0].id_service
+        id_service: turn.rows[0].id_service,
+        email: turn.rows[0].email,
+        name: turn.rows[0].name,
+        phoneNumber: turn.rows[0].phone_number,
+        service: turn.rows[0].service,
+        duration: turn.rows[0].duration,
+        price: turn.rows[0].price
       }
     } catch (error) {
       if (error instanceof NotAvailableError) throw error

@@ -3,6 +3,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat.js'
 import { ConnectionError, UnauthorizedError, NotAvailableError, NotFoundError } from '../errors.js'
 import { validateCalendar } from '../schemes/schemes.js'
 import { isValidUuid } from '../utils/validation.js'
+import { transporter } from '../utils/mailer.js'
 
 dayjs.extend(customParseFormat)
 
@@ -131,6 +132,38 @@ export class TurnController {
 
       const turn = await this.turnModel.request({ turnId, userId, serviceId })
 
+      const turnInfoClient = `
+        Usuario: ${turn.name}
+        Servicio: ${turn.service}
+        Duración: ${turn.duration}
+        Valor: $${turn.price}
+        Fecha: ${turn.date}
+        Hora: ${turn.time}
+      `
+
+      const turnInfoAdmin = `
+        Usuario: ${turn.name}
+        Email: ${turn.email}
+        Teléfono: ${turn.phoneNumber}
+        Servicio: ${turn.service}
+        Fecha: ${turn.date}
+        Hora: ${turn.time}
+      `
+
+      await transporter.sendMail({
+        from: process.env.OUT_EMAIL,
+        to: process.env.OUT_EMAIL,
+        subject: `${turn.name} ha solicitado un turno`,
+        text: `Se ha solicitado un turno con la siguiente información:\n\n${turnInfoAdmin}`
+      })
+
+      await transporter.sendMail({
+        from: process.env.OUT_EMAIL,
+        to: turn.email,
+        subject: 'Gracias por solicitar un turno en JIE',
+        text: `La información de tu turno es la siguiente:\n\n${turnInfoClient}`
+      })
+
       return res.status(200).json({ status: 200, statusMessage: 'Success', data: turn })
     } catch (error) {
       if (error instanceof NotAvailableError) {
@@ -174,6 +207,7 @@ export class TurnController {
 
       await this.turnModel.cancel({ turnId, userId })
 
+      // Antes de la respuesta mandar mail de confirmación de cancelacion de turno tanto al cliente como al administrador.
       return res.status(200).json({ status: 200, statusMessage: 'Success' })
     } catch (error) {
       if (error instanceof NotFoundError) {

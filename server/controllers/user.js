@@ -1,6 +1,7 @@
 import { AlreadyExistsError, ConnectionError, InvalidCredentialsError, NotFoundError } from '../errors.js'
 import { validatePartialUser, validatePassword, validateUser } from '../schemes/schemes.js'
 import { isValidRole, isValidUuid } from '../utils/validation.js'
+import { transporter } from '../utils/mailer.js'
 
 export class UserController {
   constructor ({ userModel }) {
@@ -67,6 +68,13 @@ export class UserController {
       }
 
       await this.userModel.create({ info: { name, email, password, phoneNum } })
+
+      await transporter.sendMail({
+        from: `"JIE Turnos" <${process.env.OUT_EMAIL}>`,
+        to: email,
+        subject: 'Gracias por crear una cuenta en JIE Turnos',
+        text: 'Este correo es para confirmar la creación de tu cuenta en JIE Turnos, ya puedes iniciar sesión y programar citas cuando quieras.'
+      })
 
       return res.status(201).json({ status: 201, statusMessage: 'Successful Registration' })
     } catch (error) {

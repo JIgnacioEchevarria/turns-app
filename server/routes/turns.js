@@ -581,7 +581,15 @@ export const createTurnRouter = ({ turnModel }) => {
    *                      date_time:
    *                        type: string
    *                        format: date-time
-   *                        example: "2024-08-06 05:00:00"
+   *                        example: "2024-08-12 05:00:00"
+   *                      date:
+   *                        type: string
+   *                        format: date
+   *                        example: "2024-08-12"
+   *                      time:
+   *                        type: string
+   *                        format: time
+   *                        example: "05:00:00"
    *                      id_turn:
    *                        type: string
    *                        format: uuid
@@ -594,6 +602,25 @@ export const createTurnRouter = ({ turnModel }) => {
    *                        type: string
    *                        format: uuid
    *                        example: "ed202000-b6ea-417b-8bfc-a3eb9a603b1a"
+   *                      email:
+   *                        type: string
+   *                        format: email
+   *                        example: "jDutch@example.com"
+   *                      name:
+   *                        type: string
+   *                        example: "jhonDutch"
+   *                      phoneNumber:
+   *                        type: string
+   *                        example: "2349089078"
+   *                      service:
+   *                        type: string
+   *                        example: "Haircut"
+   *                      duration:
+   *                        type: integer
+   *                        example: 30
+   *                      price:
+   *                        type: integer
+   *                        example: 2000
    *        403:
    *          description: Access not authorized
    *          content:

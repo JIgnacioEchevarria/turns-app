@@ -50,7 +50,6 @@ export class UserModel {
           WHERE name = $1;`,
         [name]
       )
-      console.log(nameVerification)
 
       const emailVerification = await pool.query(
         `SELECT *
@@ -58,7 +57,6 @@ export class UserModel {
           WHERE email = $1;`,
         [email]
       )
-      console.log(name)
 
       if (nameVerification.rowCount > 0) throw new AlreadyExistsError('There is already a user with that username')
       if (emailVerification.rowCount > 0) throw new AlreadyExistsError('There is already a user with that email')
