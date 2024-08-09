@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { UserController } from '../controllers/user.js'
-import { isAdmin, validateAccessToken } from '../utils/authorization.js'
+import { isAdmin, isAdminOrEmployee, validateAccessToken } from '../utils/authorization.js'
 
 export const createUserRouter = ({ userModel }) => {
   const usersRouter = Router()
@@ -124,7 +124,7 @@ export const createUserRouter = ({ userModel }) => {
    *                    type: string
    *                    example: "Database is not available"
   */
-  usersRouter.get('/', validateAccessToken, isAdmin, userController.getAll)
+  usersRouter.get('/', validateAccessToken, isAdminOrEmployee, userController.getAll)
 
   /**
    * @swagger

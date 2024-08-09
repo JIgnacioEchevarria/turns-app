@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { TurnController } from '../controllers/turn.js'
-import { isAdmin, validateAccessToken } from '../utils/authorization.js'
+import { isAdmin, isAdminOrEmployee, validateAccessToken } from '../utils/authorization.js'
 
 export const createTurnRouter = ({ turnModel }) => {
   const turnsRouter = Router()
@@ -184,7 +184,7 @@ export const createTurnRouter = ({ turnModel }) => {
    *                    type: string
    *                    example: "Database is not available"
   */
-  turnsRouter.get('/:date/registered', validateAccessToken, isAdmin, turnController.getAll)
+  turnsRouter.get('/:date/registered', validateAccessToken, isAdminOrEmployee, turnController.getAll)
 
   /**
    * @swagger

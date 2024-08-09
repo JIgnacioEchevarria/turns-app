@@ -9,6 +9,7 @@ import LoginIcon from '@mui/icons-material/Login'
 import { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useUserStore } from '../store/user'
+import { ROLES } from '../constants/roles.js'
 
 export const NavigationMenu = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -65,7 +66,7 @@ export const NavigationMenu = () => {
                     <li className='menu-item'>
                       <Link to={'/account/my-turns'}><DateRangeIcon style={{ color: 'grey' }} /> <span>Mis turnos</span></Link>
                     </li>
-                    {userInfo.role === 'admin' &&
+                    {(userInfo.role === ROLES.ADMIN || userInfo.role === ROLES.EMPLOYEE) &&
                       <li className='menu-item'>
                         <a>
                           <StoreIcon style={{ color: 'grey' }} /> <span>Administración</span>
@@ -76,7 +77,7 @@ export const NavigationMenu = () => {
                           <li className='submenu-item'><Link to={'/administration/turns'}><span>Turnos agendados</span></Link></li>
                           <li className='submenu-item'><Link to={'/administration/services'}><span>Servicios</span></Link></li>
                           <li className='submenu-item'><Link to={'/administration/users'}><span>Usuarios</span></Link></li>
-                          <li className='submenu-item'><Link to={'/administration/settings'}><span>Configurar calendario</span></Link></li>
+                          {userInfo.role === ROLES.ADMIN && <li className='submenu-item'><Link to={'/administration/calendar'}><span>Configurar calendario</span></Link></li>}
                         </ul>
                       </li>
                     }

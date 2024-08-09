@@ -74,11 +74,10 @@ export class UserController {
         to: email,
         subject: 'Gracias por crear una cuenta en JIE Turnos',
         text: 'Este correo es para confirmar la creación de tu cuenta en JIE Turnos, ya puedes iniciar sesión y programar citas cuando quieras.'
-      })
+      }).catch(() => {})
 
       return res.status(201).json({ status: 201, statusMessage: 'Successful Registration' })
     } catch (error) {
-      console.log(error)
       if (error instanceof AlreadyExistsError) {
         return res.status(409).json({ status: 409, statusMessage: 'Already Exists', error: error.message })
       }

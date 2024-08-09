@@ -130,7 +130,7 @@ export const UsersPage = () => {
   )
 }
 
-export const SettingsPage = () => {
+export const CalendarPage = () => {
   const [showSuccessGenerate, setShowSuccessGenerate] = useState(false)
   const configureCalendar = useTurnStore(state => state.configureCalendar)
   const isLoading = useTurnStore(state => state.isLoading)

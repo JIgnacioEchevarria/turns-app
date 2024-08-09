@@ -9,10 +9,10 @@ import { HomePage } from './pages/Home'
 import { LoginPage } from './pages/Login'
 import { RegistrationPage } from './pages/Registration'
 import { MyAccountPage } from './pages/MyAccount'
-import { ProtectedRoute, ProtectedRouteAdmin } from './components/ProtectedRoutes'
+import { ProtectedRoute, ProtectedRouteAdmin, ProtectedRouteAdminOrEmployee } from './components/ProtectedRoutes'
 import { EditPasswordPage, EditProfilePage } from './pages/EditUser'
 import { NotFoundPage } from './pages/NotFound'
-import { ServicesPage, SettingsPage, TurnsPage, UsersPage } from './pages/Asministration'
+import { ServicesPage, CalendarPage, TurnsPage, UsersPage } from './pages/Asministration'
 import { ScrollToTop } from './components/ScrollToTop'
 
 function App () {
@@ -46,23 +46,23 @@ function App () {
             </ProtectedRoute>
           } />
           <Route path='/administration/turns' element={
-            <ProtectedRouteAdmin>
+            <ProtectedRouteAdminOrEmployee>
               <TurnsPage />
-            </ProtectedRouteAdmin>
+            </ProtectedRouteAdminOrEmployee>
           } />
           <Route path='/administration/services' element={
-            <ProtectedRouteAdmin>
+            <ProtectedRouteAdminOrEmployee>
               <ServicesPage />
-            </ProtectedRouteAdmin>
+            </ProtectedRouteAdminOrEmployee>
           } />
           <Route path='/administration/users' element={
-            <ProtectedRouteAdmin>
+            <ProtectedRouteAdminOrEmployee>
               <UsersPage />
-            </ProtectedRouteAdmin>
+            </ProtectedRouteAdminOrEmployee>
           } />
-          <Route path='/administration/settings' element={
+          <Route path='/administration/calendar' element={
             <ProtectedRouteAdmin>
-              <SettingsPage />
+              <CalendarPage />
             </ProtectedRouteAdmin>
           } />
           <Route path='/not-found' element={<NotFoundPage />} />

@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken'
+import { ROLES } from '../constants/roles.js'
 
 export const generateAccessToken = (user) => {
   return jwt.sign(user, process.env.JWT_SECRET_KEY, { expiresIn: '1h' }) // Info - palabra secreta - expiración
@@ -19,10 +20,14 @@ export const validateAccessToken = (req, res, next) => {
   })
 }
 
-export const isAdmin = (req, res, next) => {
-  if (req.user.role !== 'admin') {
-    return res.status(403).json({ status: 403, statusMessage: 'Access Not Authorized' })
+const hasRole = (allowedRoles) => {
+  return (req, res, next) => {
+    if (!allowedRoles.includes(req.user.role)) {
+      return res.status(403).json({ status: 403, statusMessage: 'Access Not Authorized' })
+    }
+    next()
   }
-
-  next()
 }
+
+export const isAdmin = hasRole([ROLES.ADMIN])
+export const isAdminOrEmployee = hasRole([ROLES.ADMIN, ROLES.EMPLOYEE])

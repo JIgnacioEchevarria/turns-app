@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useUserStore } from '../store/user'
 import { useNavigate } from 'react-router-dom'
 import { roleToText } from '../utils/userUtils'
+import { ROLES } from '../constants/roles.js'
 
 export const RoleSelect = ({ info }) => {
   const [userRole, setUserRole] = useState({ id: info.id, role: info.role })
@@ -48,8 +49,8 @@ export const RoleSelect = ({ info }) => {
           value={userRole.role}
           onChange={handleChangeRole}
         >
-            <MenuItem value='client'>Cliente</MenuItem>
-            <MenuItem value='admin'>Administrador</MenuItem>
+            <MenuItem value={ROLES.CLIENT}>{roleToText(ROLES.CLIENT)}</MenuItem>
+            <MenuItem value={ROLES.EMPLOYEE}>{roleToText(ROLES.EMPLOYEE)}</MenuItem>
         </Select>
       </FormControl>
     </Box>

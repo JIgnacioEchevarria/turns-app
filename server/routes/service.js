@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { ServiceController } from '../controllers/service.js'
-import { isAdmin, validateAccessToken } from '../utils/authorization.js'
+import { isAdmin, isAdminOrEmployee, validateAccessToken } from '../utils/authorization.js'
 
 export const createServiceRouter = ({ serviceModel }) => {
   const serviceRouter = Router()
@@ -238,7 +238,7 @@ export const createServiceRouter = ({ serviceModel }) => {
    *                    type: string
    *                    example: "Database is not available"
   */
-  serviceRouter.post('/', serviceController.create)
+  serviceRouter.post('/', validateAccessToken, isAdminOrEmployee, serviceController.create)
 
   /**
    * @swagger
@@ -332,7 +332,7 @@ export const createServiceRouter = ({ serviceModel }) => {
    *                    type: string
    *                    example: "Database is not available"
   */
-  serviceRouter.patch('/:id/deactivate', validateAccessToken, isAdmin, serviceController.delete)
+  serviceRouter.patch('/:id/deactivate', validateAccessToken, isAdminOrEmployee, serviceController.delete)
 
   /**
    * @swagger
@@ -488,7 +488,7 @@ export const createServiceRouter = ({ serviceModel }) => {
    *                    type: string
    *                    example: "Database is not available"
   */
-  serviceRouter.patch('/:id', validateAccessToken, isAdmin, serviceController.update)
+  serviceRouter.patch('/:id', validateAccessToken, isAdminOrEmployee, serviceController.update)
 
   return serviceRouter
 }

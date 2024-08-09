@@ -6,6 +6,7 @@ import { roleToText } from '../utils/userUtils.js'
 import Paper from '@mui/material/Paper'
 import { useNavigate } from 'react-router-dom'
 import { RoleSelect } from './RoleSelect.jsx'
+import { ROLES } from '../constants/roles.js'
 
 export const UsersTable = () => {
   const fetchUsers = useUserStore(state => state.fetchUsers)
@@ -48,7 +49,7 @@ export const UsersTable = () => {
                             <TableCell sx={{ fontSize: '1rem' }} component="th" scope="row">{user.email}</TableCell>
                             <TableCell sx={{ fontSize: '1rem' }} component="th" scope="row">{user.phone_number}</TableCell>
                             <TableCell sx={{ fontSize: '1rem' }} component="th" scope="row">
-                              {userInfo.role === 'admin' && userInfo.id !== user.id
+                              {userInfo.role === ROLES.ADMIN && userInfo.id !== user.id
                                 ? <RoleSelect info={user} />
                                 : <p>{roleToText(user.role)}</p>
                               }

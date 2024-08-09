@@ -155,14 +155,14 @@ export class TurnController {
         to: process.env.OUT_EMAIL,
         subject: `${turn.name} ha solicitado un turno`,
         text: `Se ha solicitado un turno con la siguiente información:\n\n${turnInfoAdmin}`
-      })
+      }).catch(() => {})
 
       await transporter.sendMail({
         from: process.env.OUT_EMAIL,
         to: turn.email,
         subject: 'Gracias por solicitar un turno en JIE',
         text: `La información de tu turno es la siguiente:\n\n${turnInfoClient}`
-      })
+      }).catch(() => {})
 
       return res.status(200).json({ status: 200, statusMessage: 'Success', data: turn })
     } catch (error) {
