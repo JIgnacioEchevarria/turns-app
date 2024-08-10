@@ -276,6 +276,7 @@ export class TurnModel {
       )
 
       return {
+        user: turn.rows[0].name,
         date_time: dayjs(turn.rows[0].date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss'),
         date: dayjs(turn.rows[0].date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD'),
         time: dayjs(turn.rows[0].date_time).tz('America/Argentina/Buenos_Aires').format('HH:mm')

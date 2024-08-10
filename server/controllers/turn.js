@@ -151,14 +151,14 @@ export class TurnController {
       `
 
       await transporter.sendMail({
-        from: process.env.OUT_EMAIL,
+        from: `"JIE Turnos" <${process.env.OUT_EMAIL}>`,
         to: process.env.OUT_EMAIL,
         subject: `${turn.name} ha solicitado un turno`,
         text: `Se ha solicitado un turno con la siguiente información:\n\n${turnInfoAdmin}`
       }).catch(() => {})
 
       await transporter.sendMail({
-        from: process.env.OUT_EMAIL,
+        from: `"JIE Turnos" <${process.env.OUT_EMAIL}>`,
         to: turn.email,
         subject: 'Gracias por solicitar un turno en JIE',
         text: `La información de tu turno es la siguiente:\n\n${turnInfoClient}`
@@ -208,17 +208,17 @@ export class TurnController {
       const turnRemoved = await this.turnModel.cancel({ turnId, userId })
 
       const turnInfo = `
-        Usuario: ${turnRemoved.name}
+        Usuario: ${turnRemoved.user}
         Fecha: ${turnRemoved.date}
         Hora: ${turnRemoved.time}
       `
 
       await transporter.sendMail({
-        from: process.env.OUT_EMAIL,
+        from: `"JIE Turnos" <${process.env.OUT_EMAIL}>`,
         to: process.env.OUT_EMAIL,
-        subject: `${turnRemoved.name} ha cancelado su turno`,
+        subject: `${turnRemoved.user} ha cancelado su turno`,
         text: `La información del turno es la siguiente:\n\n${turnInfo}`
-      })
+      }).catch(() => {})
 
       // Antes de la respuesta mandar mail de confirmación de cancelacion de turno tanto al cliente como al administrador.
       return res.status(200).json({ status: 200, statusMessage: 'Success' })
