@@ -5,6 +5,7 @@ Una aplicación web fullstack para facilitar la gestión de turnos en diversas i
 La aplicación cuenta con dos tipos de usuarios con diferentes niveles de acceso:
 
 - **Cliente**: Usuarios que reservan turnos y gestionan su información personal.
+- **Empleado**: Usuarios que gestionan turnos y llevan a cabo las tareas diarias relacionadas con la prestación de servicios.
 - **Administrador**: Usuarios con permisos elevados que gestionan la aplicación y los turnos disponibles.
 
 ## Objetivo
@@ -19,6 +20,10 @@ Para explorar la aplicación desde diferentes perspectivas, usa laas siguientes 
 #### Cliente
 - **Email**: cliente@example.com
 - **Contraseña**: cliente123
+
+### Empleado
+- **Email**: employee@example.com
+- **Contraseña**: employee123
 
 #### Administrador
 - **Email**: admin@example.com
@@ -48,11 +53,12 @@ Para explorar la aplicación desde diferentes perspectivas, usa laas siguientes 
 ### Otros
 - **Interfaz Responsive**: Diseño adaptable para garantizar una buena experiencia en dispositivos móviles y de escritorio.
 - **Adaptado a la Zona Horaria de Argentina**: Los horarios de disponibilidad y la programación de turnos están configurados para ajustarse a la zona horaria de Argentina (ART). Esto asegura que la aplicación funcione correctamente según la hora local en Argentina.
+- **Notificaciones**: Sistema de notifcaciones a través de Mails.
 
 ### Funcionalidades Futuras
 Estas son algunas de las funcionalidades que planeo agregar en futuras versiones del proyecto:
 
-- **Notificaciones**: Implementar un sistema de notificaciones para confirmar reservas y enviar recordatorios a los usuarios.
+- **Notificaciones**: Implementar un sistema de notificaciones mediante Whatsapp.
 ## Tech Stack
 
 **Client:** React, Material-UI, Vite

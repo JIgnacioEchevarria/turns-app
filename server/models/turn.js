@@ -251,8 +251,9 @@ export class TurnModel {
   static async cancel ({ turnId, userId }) {
     try {
       const turn = await pool.query(
-        `SELECT id_turn, date_time
-          FROM turns
+        `SELECT t.id_turn, t.date_time, u.name
+          FROM turns t INNER JOIN users u
+          ON t.user_id = u.id_user
           WHERE id_turn = $1
           AND user_id = $2
           AND available = false;`,
@@ -273,6 +274,12 @@ export class TurnModel {
           AND user_id = $2;`,
         [turnId, userId]
       )
+
+      return {
+        date_time: dayjs(turn.rows[0].date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss'),
+        date: dayjs(turn.rows[0].date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD'),
+        time: dayjs(turn.rows[0].date_time).tz('America/Argentina/Buenos_Aires').format('HH:mm')
+      }
     } catch (error) {
       if (error instanceof NotFoundError) throw error
       if (error instanceof UnauthorizedError) throw error

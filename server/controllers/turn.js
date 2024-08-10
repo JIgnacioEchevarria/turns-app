@@ -205,7 +205,20 @@ export class TurnController {
       if (!isValidUuid(userId)) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'Invalid user ID provided' })
       if (!isValidUuid(turnId)) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'Invalid turn ID provided' })
 
-      await this.turnModel.cancel({ turnId, userId })
+      const turnRemoved = await this.turnModel.cancel({ turnId, userId })
+
+      const turnInfo = `
+        Usuario: ${turnRemoved.name}
+        Fecha: ${turnRemoved.date}
+        Hora: ${turnRemoved.time}
+      `
+
+      await transporter.sendMail({
+        from: process.env.OUT_EMAIL,
+        to: process.env.OUT_EMAIL,
+        subject: `${turnRemoved.name} ha cancelado su turno`,
+        text: `La información del turno es la siguiente:\n\n${turnInfo}`
+      })
 
       // Antes de la respuesta mandar mail de confirmación de cancelacion de turno tanto al cliente como al administrador.
       return res.status(200).json({ status: 200, statusMessage: 'Success' })
