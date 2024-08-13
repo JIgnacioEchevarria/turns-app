@@ -533,6 +533,14 @@ describe('Service endpoints', () => {
       expect(response.body).toHaveProperty('statusMessage', 'Not Found')
     })
 
+    it('should respond with status 400 if the id parameter is invalid', async () => {
+      const response = await request(app)
+        .patch('/api/v1/services/janfiaef/deactivate')
+        .set('Cookie', accessToken)
+      expect(response.status).toBe(400)
+      expect(response.body).toHaveProperty('statusMessage', 'Bad Request')
+    })
+
     it('shoul respond with status 403 if the user is not logged in', async () => {
       const response = await request(app)
         .patch('/api/v1/services/n8rbn2r/deactivate')
@@ -633,6 +641,14 @@ describe('Service endpoints', () => {
       expect(response.body).toHaveProperty('statusMessage', 'Already Exists')
     })
 
+    it('should respond with status 400 if the id parameter is invalid', async () => {
+      const response = await request(app)
+        .patch('/api/v1/services/janfiaef/deactivate')
+        .set('Cookie', accessToken)
+      expect(response.status).toBe(400)
+      expect(response.body).toHaveProperty('statusMessage', 'Bad Request')
+    })
+
     it('should respond with status 403 if user is not logged in', async () => {
       const response = await request(app)
         .patch('/api/v1/services/0533c164-4b7f-11ef-99b3-b42e99d80da0')
@@ -677,6 +693,13 @@ describe('Turn endpoints', () => {
       expect(response.body).toHaveProperty('statusMessage', 'Success')
       expect(response.body).toHaveProperty('data')
       expect(response.body.data).toBeInstanceOf(Array)
+    })
+
+    it('should respond with status 400 if the date parameter is invalid', async () => {
+      const response = await request(app)
+        .get('/api/v1/turns/2374824/available')
+      expect(response.status).toBe(400)
+      expect(response.body).toHaveProperty('statusMessage', 'Bad Request')
     })
 
     it('should respond with status 404 if not found turns', async () => {
@@ -785,12 +808,20 @@ describe('Turn endpoints', () => {
       expect(response.body).toHaveProperty('statusMessage', 'Not Available')
     })
 
-    it('should respond with status 400 if some parameter is null', async () => {
+    it('should respond with status 400 if the turnId parameter is invalid', async () => {
       const response = await request(app)
-        .patch('/api/v1/turns')
+        .patch('/api/v1/turns?turnId=fagsgr&serviceId=62201d26-4e7e-11ef-99b3-b42e99d80da0')
         .set('Cookie', accessToken)
       expect(response.status).toBe(400)
-      expect(response.body).toHaveProperty('statusMessage', 'Missing Parameters')
+      expect(response.body).toHaveProperty('statusMessage', 'Bad Request')
+    })
+
+    it('should respond with status 400 if the serviceId parameter is invalid', async () => {
+      const response = await request(app)
+        .patch('/api/v1/turns?turnId=061d1502-4dd1-11ef-99b3-b42e99d80da0&serviceId=afgar')
+        .set('Cookie', accessToken)
+      expect(response.status).toBe(400)
+      expect(response.body).toHaveProperty('statusMessage', 'Bad Request')
     })
 
     it('should respond with status 403 if the user is not logged in', async () => {
@@ -848,6 +879,14 @@ describe('Turn endpoints', () => {
       expect(response.body).toHaveProperty('statusMessage', 'Not Found')
     })
 
+    it('should respond with status 400 if the id parameter is invalid', async () => {
+      const response = await request(app)
+        .patch('/api/v1/turns/31fcaade-4b60-11ef-bd2f-b42e99d80da1/status')
+        .set('Cookie', accessToken)
+      expect(response.status).toBe(400)
+      expect(response.body).toHaveProperty('statusMessage', 'Bad Request')
+    })
+
     it('should respond with status 403 if the shift cannot be canceled because it exceeded the time limit', async () => {
       const response = await request(app)
         .patch('/api/v1/turns/062321e5-4dd1-11ef-99b3-b42e99d80da0/status')
@@ -889,7 +928,7 @@ describe('Turn endpoints', () => {
 
     it('should respond with status 200 and list of turns', async () => {
       const response = await request(app)
-        .get('/api/v1/turns/2024-07-29/registered')
+        .get('/api/v1/turns/registered?type=past')
         .set('Cookie', accessToken)
       expect(response.status).toBe(200)
       expect(response.body).toHaveProperty('statusMessage', 'Success')
@@ -899,10 +938,17 @@ describe('Turn endpoints', () => {
 
     it('should respond with status 404 if no turns are found', async () => {
       const response = await request(app)
-        .get('/api/v1/turns/2024-07-28/registered')
+        .get('/api/v1/turns/registered?type=future')
         .set('Cookie', accessToken)
       expect(response.status).toBe(404)
       expect(response.body).toHaveProperty('statusMessage', 'Not Found')
+    })
+
+    it('should respond with status 400 if the type param is invalid', async () => {
+      const response = await request(app)
+        .get('/api/v1/turns/registered?type=MF3QUJE')
+      expect(response.status).toBe(400)
+      expect(response.body).toHaveProperty('statusMessage', 'Bad Request')
     })
 
     it('should respond with status 403 if the user is not logged in', async () => {
