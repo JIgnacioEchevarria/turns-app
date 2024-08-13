@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { ServiceController } from '../controllers/service.js'
-import { isAdmin, isAdminOrEmployee, validateAccessToken } from '../utils/authorization.js'
+import { isAdminOrEmployee, validateAccessToken } from '../utils/authorization.js'
 
 export const createServiceRouter = ({ serviceModel }) => {
   const serviceRouter = Router()
