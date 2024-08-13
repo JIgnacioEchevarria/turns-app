@@ -47,7 +47,7 @@ export const createTurnRouter = ({ turnModel }) => {
    * @swagger
    *  /api/v1/turns/registered:
    *    get:
-   *      summary: Get requested turns
+   *      summary: Get all requested turns
    *      tags: [Turn]
    *      security:
    *        - cookieAuth: []
