@@ -3,22 +3,36 @@ import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc.js'
 import timezone from 'dayjs/plugin/timezone.js'
 import { ConnectionError, UnauthorizedError, NotAvailableError, NotFoundError } from '../errors.js'
+import { TURN_TYPES } from '../constants/registeredTurnsType.js'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
 export class TurnModel {
-  static async getAll ({ date }) {
+  static async getAll ({ type }) {
+    let query
+    const currentDate = dayjs().format('YYYY-MM-DD HH:mm:ss-03')
+
+    if (type === TURN_TYPES.FUTURE_TURNS) {
+      query = `SELECT t.id_turn, t.date_time, t.user_id AS id_user, u.name username, u.email userEmail, u.phone_number, t.service_id AS id_service, s.name service, s.price, s.duration
+                FROM turns t
+                INNER JOIN users u ON t.user_id = u.id_user
+                INNER JOIN services s ON t.service_id = s.id_service
+                WHERE t.available = false
+                AND t.date_time > $1
+                ORDER BY t.date_time;`
+    } else if (type === TURN_TYPES.PAST_TURNS) {
+      query = `SELECT t.id_turn, t.date_time, t.user_id AS id_user, u.name username, u.email userEmail, u.phone_number, t.service_id AS id_service, s.name service, s.price, s.duration
+                FROM turns t
+                INNER JOIN users u ON t.user_id = u.id_user
+                INNER JOIN services s ON t.service_id = s.id_service
+                WHERE t.available = false
+                AND t.date_time <= $1
+                ORDER BY t.date_time;`
+    }
+
     try {
-      const turns = await pool.query(
-        `SELECT id_turn, t.date_time, user_id AS id_user, u.name username, u.email userEmail, u.phone_number, t.service_id AS id_service, s.name service, s.price, s.duration
-          FROM turns t
-          INNER JOIN users u ON t.user_id = u.id_user
-          INNER JOIN services s ON t.service_id = s.id_service
-          WHERE t.available = false
-          AND DATE(t.date_time) = DATE($1);`,
-        [date]
-      )
+      const turns = await pool.query(query, [currentDate])
 
       if (turns.rowCount === 0) throw new NotFoundError('Turns not found')
 

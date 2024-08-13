@@ -17,8 +17,8 @@ export const MyTurnsPage = () => {
     <div className="myturns">
       {userTurns.length > 0
         ? <>
-          <PastTurns />
           <FutureTurns />
+          <PastTurns />
           </>
         : <div className='nouserturns'>
             <ErrorOutlineIcon sx={{ fontSize: 80, color: '#3ea5ce' }} />

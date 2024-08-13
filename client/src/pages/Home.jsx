@@ -86,7 +86,7 @@ export const HomePage = () => {
         {turnError &&
           <PopupAlert handleClosePopup={handleClosePopUp} errorMessage={turnErrorMessages(turnError.error)} />
         }
-        <div className='turns-time'>
+        <div className='available-turns-list'>
           {!isLoading && availableTurns && availableTurns.map(t => (
             <div onClick={() => handleSelectTurn(t.id_turn)} className={selectedOptions.turn === t.id_turn ? 'turntime-card turntime-card-selected' : 'turntime-card'} key={t.id_turn}>
               <p>{t.time} hs</p>

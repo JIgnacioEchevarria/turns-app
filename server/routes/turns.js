@@ -52,14 +52,13 @@ export const createTurnRouter = ({ turnModel }) => {
    *      security:
    *        - cookieAuth: []
    *      parameters:
-   *        - in: path
-   *          name: date
+   *        - in: query
+   *          name: type
    *          required: true
    *          schema:
    *            type: string
-   *            format: date-time
-   *            example: "2024-08-06"
-   *          description: Date from which you want to obtain the turns
+   *            example: "future"
+   *          description: Type of turns you want to obtain
    *      responses:
    *        200:
    *          description: A list of turns
@@ -150,7 +149,7 @@ export const createTurnRouter = ({ turnModel }) => {
    *                    example: "Bad Request"
    *                  error:
    *                    type: string
-   *                    example: "Invalid date format"
+   *                    example: "Invalid type provided"
    *        404:
    *          description: Turns not found
    *          content:
@@ -184,7 +183,7 @@ export const createTurnRouter = ({ turnModel }) => {
    *                    type: string
    *                    example: "Database is not available"
   */
-  turnsRouter.get('/:date/registered', validateAccessToken, isAdminOrEmployee, turnController.getAll)
+  turnsRouter.get('/registered', validateAccessToken, isAdminOrEmployee, turnController.getAll)
 
   /**
    * @swagger

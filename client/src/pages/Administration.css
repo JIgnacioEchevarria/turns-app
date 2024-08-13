@@ -165,77 +165,49 @@
 }
 
 /* Turns Page */
-.no-turns-alert {
+.turns-page-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.turns-page-head h1 {
+    font-size: 1.8rem;
+}
+
+.registered-turns-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.no-registered-turns-alert {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 1rem;
-    padding: 3rem 00;
-}
-
-.turns-page-head {
-    width: 100%;
-    display: flex;
-}
-
-.turns-page-body {
-    width: 100%;
-    display: flex;
-    gap: 2rem;
-    position: relative;
-}
-
-.calendar-admin .rdrMonth {
-    width: 100%;
-}
-
-.calendar-admin .rdrDay {
-    padding: .5rem;
-    font-size: 1rem;
-}
-
-@media (max-width: 850px) {
-    .turns-page-body {
-        flex-direction: column;
-    }
-}
-
-.turns-list {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    width: 100%;
-}
-
-.no-registered-turns {
-    margin: auto;
+    padding: 8rem 00;
     text-align: center;
-}
-
-.turn-list-head {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: 600;
 }
 
 .turn-card {
     background: #FFFFFF;
     width: 100%;
     display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    justify-content: space-between;
     padding: 1rem;
     border-radius: .2rem;
     box-shadow: 2px 2px 4px 1px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
 }
 
 .turn-card-group {
     display: flex;
     flex-direction: column;
     gap: .5rem;
+    width: 50%;
 }
 
 .turn-card-group-head h3 {
@@ -256,6 +228,17 @@
 
 .turn-card-label {
     color: #8d8a8a;
+}
+
+@media (max-width: 600px)  {
+    .turn-card {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .turn-card-group {
+        width: 100%;
+    }
 }
 
 /* Settings page */

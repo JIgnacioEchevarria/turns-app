@@ -85,10 +85,10 @@ export const useTurnStore = create()(persist((set, get) => {
       }
     },
 
-    fetchRegisteredTurns: async (date) => {
+    fetchRegisteredTurns: async (turnsType) => {
       set({ isLoading: true, turnError: null })
       try {
-        const res = await fetch(`${URL}/api/v1/turns/${date}/registered`, {
+        const res = await fetch(`${URL}/api/v1/turns/registered?type=${turnsType}`, {
           credentials: 'include'
         })
         const data = await res.json()

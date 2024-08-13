@@ -36,9 +36,9 @@
 .turntime-card {
     padding: 1rem 1.5rem;
     background: #F3F3F3;
-    border-radius: 100vh;
+    border-radius: .5rem;
     font-weight: 700;
-    font-size: 2.5vh;
+    font-size: 1.5rem;
     cursor: pointer;
     transition: background .3s ease-out;
 }
@@ -56,10 +56,12 @@
     background: #3082a2;
 }
 
-.turns-time {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+.available-turns-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 1rem;
+    width: 100%;
 }
 
 .loading {

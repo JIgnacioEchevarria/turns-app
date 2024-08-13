@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat.js'
 import { ConnectionError, UnauthorizedError, NotAvailableError, NotFoundError } from '../errors.js'
 import { validateCalendar } from '../schemes/schemes.js'
-import { isValidUuid } from '../utils/validation.js'
+import { isValidTurnsType, isValidUuid } from '../utils/validation.js'
 import { transporter } from '../utils/mailer.js'
 
 dayjs.extend(customParseFormat)
@@ -14,13 +14,11 @@ export class TurnController {
 
   getAll = async (req, res) => {
     try {
-      const date = req.params.date
+      const type = req.query.type
 
-      const format = 'YYYY-MM-DD'
+      if (!isValidTurnsType(type)) return res.status(404).json({ status: 404, statusMessage: 'Bad Request', error: 'Invalid type provided' })
 
-      if (!dayjs(date, format, true).isValid()) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'Invalid date format' })
-
-      const turns = await this.turnModel.getAll({ date })
+      const turns = await this.turnModel.getAll({ type })
 
       return res.status(200).json({ status: 200, statusMessage: 'Success', data: turns })
     } catch (error) {

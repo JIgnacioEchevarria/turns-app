@@ -15,26 +15,32 @@ import { TimeSlotInput } from '../components/TimeSlotInput.jsx'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import dayjs from 'dayjs'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Calendar } from 'react-date-range'
 import { FormErrorMessage } from '../components/FormErrorMessage.jsx'
+import { TURN_TYPES } from '../constants/registeredTurnsTypes.js'
+import { Box, FormControl, MenuItem, Select } from '@mui/material'
 
 export const TurnsPage = () => {
-  const [selectedDate, setSelectedDate] = useState()
-
+  const [displayedTurns, setDisplayedTurns] = useState(TURN_TYPES.FUTURE_TURNS)
   const isLoading = useTurnStore(state => state.isLoading)
   const registeredTurns = useTurnStore(state => state.registeredTurns)
   const fetchRegisteredTurns = useTurnStore(state => state.fetchRegisteredTurns)
   const logout = useUserStore(state => state.logout)
   const navigate = useNavigate()
 
-  const handleSelectDate = async (date) => {
-    const formattedDate = date.toISOString().slice(0, 10)
-    setSelectedDate(date)
-    const status = await fetchRegisteredTurns(formattedDate)
-    if (status === 403) {
-      const success = await logout()
-      if (success) navigate('/login', { state: { accessDeniedMessage: 'Acceso denegado' } })
+  useEffect(() => {
+    const fetchAPI = async () => {
+      const status = await fetchRegisteredTurns(displayedTurns)
+      if (status === 403) {
+        const success = await logout()
+        if (success) navigate('/login', { state: { accessDeniedMessage: 'Acceso denegado' } })
+      }
     }
+
+    fetchAPI()
+  }, [navigate, fetchRegisteredTurns, displayedTurns])
+
+  const handleChangeDisplayedTurns = (turnsType) => {
+    setDisplayedTurns(turnsType)
   }
 
   return (
@@ -46,27 +52,32 @@ export const TurnsPage = () => {
       }
       <div className='turns-page-head'>
         <h1>Turnos agendados</h1>
+        <Box sx={{ minWidth: 120 }}>
+          <FormControl fullWidth>
+            <Select
+              labelId="role-select"
+              id="role-select"
+              value={displayedTurns}
+              onChange={(e) => handleChangeDisplayedTurns(e.target.value)}
+            >
+              <MenuItem value={TURN_TYPES.FUTURE_TURNS}>Próximos</MenuItem>
+              <MenuItem value={TURN_TYPES.PAST_TURNS}>Atendidos</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
       </div>
-      <div className='turns-page-body'>
-        <Calendar
-          className='calendar-admin'
-          date={selectedDate}
-          onChange={handleSelectDate}
-        />
-        <div className='turns-list'>
-          {!isLoading && registeredTurns.length > 0 && selectedDate &&
-            <>
-              <div className='turn-list-head'>
-                <p>{registeredTurns.length} Resultados</p>
+      <div className='registered-turns-list'>
+        {registeredTurns.length > 0 && !isLoading
+          ? (registeredTurns.map(turn => (
+              <TurnCard key={turn.id_turn} info={turn} />
+            )))
+          : (
+              <div className='no-registered-turns-alert'>
+                {!isLoading && displayedTurns === TURN_TYPES.FUTURE_TURNS && <h1>No tienes turnos que atender</h1>}
+                {!isLoading && displayedTurns === TURN_TYPES.PAST_TURNS && <h1>Todavía no has atendido turnos</h1>}
               </div>
-              {registeredTurns.map((turn) => (
-                <TurnCard key={turn.id_turn} info={turn} />
-              ))}
-            </>
-          }
-          {!isLoading && selectedDate && registeredTurns.length === 0 && <h2 className='no-registered-turns'>No tienes turnos agendados para este día</h2>}
-          {!selectedDate && registeredTurns.length === 0 && <h2 className='no-registered-turns'>Selecciona una fecha para ver los turnos agendados</h2>}
-        </div>
+            )
+        }
       </div>
     </div>
   )

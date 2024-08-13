@@ -122,3 +122,7 @@
 ### Revisión 7/8/2024
 - Terminada la documentacion de la API
 - Verificar que ande todo, ya verifique la de servicios y los 3 primeros endpoints de turnos.
+
+### Revisión 12/8/2024
+- Modifique la manera en la que se obtienen los turnos agendados.
+- Falta diseñar la parte del frontend, separando por turnos próximos y turnos atendidos. Ademas de ordenar por proximidad.
