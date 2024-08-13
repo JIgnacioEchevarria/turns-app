@@ -45,9 +45,9 @@ export const createTurnRouter = ({ turnModel }) => {
 
   /**
    * @swagger
-   *  /api/v1/turns/{date}/registered:
+   *  /api/v1/turns/registered:
    *    get:
-   *      summary: Get requested turns by date
+   *      summary: Get requested turns
    *      tags: [Turn]
    *      security:
    *        - cookieAuth: []
@@ -57,6 +57,9 @@ export const createTurnRouter = ({ turnModel }) => {
    *          required: true
    *          schema:
    *            type: string
+   *            enum:
+   *              - future
+   *              - past
    *            example: "future"
    *          description: Type of turns you want to obtain
    *      responses:
