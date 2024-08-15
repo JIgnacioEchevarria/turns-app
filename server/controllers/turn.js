@@ -4,6 +4,7 @@ import { ConnectionError, UnauthorizedError, NotAvailableError, NotFoundError } 
 import { validateCalendar } from '../schemes/schemes.js'
 import { isValidTurnsType, isValidUuid } from '../utils/validation.js'
 import { transporter } from '../utils/mailer.js'
+import { parseDuration } from '../utils/turnUtils.js'
 
 dayjs.extend(customParseFormat)
 
@@ -133,7 +134,7 @@ export class TurnController {
       const turnInfoClient = `
         Usuario: ${turn.name}
         Servicio: ${turn.service}
-        Duración: ${turn.duration}
+        Duración: ${parseDuration(turn.duration)}
         Valor: $${turn.price}
         Fecha: ${turn.date}
         Hora: ${turn.time}
