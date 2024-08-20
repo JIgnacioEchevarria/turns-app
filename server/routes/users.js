@@ -853,16 +853,8 @@ export const createUserRouter = ({ userModel }) => {
    *                    type: string
    *                    example: "Validation Error"
    *                  error:
-   *                    type: array
-   *                    items:
-   *                      type: object
-   *                      properties:
-   *                        field:
-   *                          type: string
-   *                          example: "password"
-   *                        message:
-   *                          type: string
-   *                          example: "Passwords do not match"
+   *                    type: string
+   *                    example: "Invalid password or email"
    *        401:
    *          description: Incorrect password
    *          content:

@@ -97,10 +97,7 @@ export class UserController {
         return res.status(422).json({
           status: 422,
           statusMessage: 'Validation Error',
-          error: result.error.errors.map(e => ({
-            field: e.path[0],
-            message: e.message
-          }))
+          error: 'Invalid password or email'
         })
       }
 

@@ -44,6 +44,20 @@ create table if not exists turns
 alter table turns
     owner to jiechevarria;
 
+create table if not exists calendar_settings
+(
+    id                uuid default uuid_generate_v4() not null
+        primary key,
+    day               text                            not null,
+    first_start_time  time                            not null,
+    first_end_time    time                            not null,
+    second_start_time time,
+    second_end_time   time
+);
+
+alter table calendar_settings
+    owner to jiechevarria;
+
 create function uuid_nil() returns uuid
     immutable
     strict
@@ -200,5 +214,4 @@ $$;
 alter function uuid_generate_v5(uuid, text) owner to postgres;
 
 grant execute on function uuid_generate_v5(uuid, text) to jiechevarria;
-
 

@@ -2,6 +2,7 @@ export const userErrorMessages = (message) => {
   if (message === 'Invalid password or email') return 'Email o contraseña invalidos'
   if (message === 'ID and ROLE attributes are required') return 'Los atributos ID y ROLE son obligatorios'
   if (message === 'Invalid role provided') return 'El rol proporcionado es inválido'
+  return 'Ha ocurrido un error inesperado, intente de nuevo más tarde'
 }
 
 export const formErrorMessages = (message) => {
