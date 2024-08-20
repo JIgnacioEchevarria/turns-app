@@ -204,7 +204,7 @@ export class TurnController {
       if (!isValidUuid(userId)) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'Invalid user ID provided' })
       if (!isValidUuid(turnId)) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'Invalid turn ID provided' })
 
-      const turnRemoved = await this.turnModel.cancel({ turnId, userId })
+      const turnRemoved = await this.turnModel.cancel({ turnId, userId }, this.availableDays)
 
       const turnInfo = `
         Usuario: ${turnRemoved.user}

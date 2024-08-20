@@ -4,6 +4,7 @@ import utc from 'dayjs/plugin/utc.js'
 import timezone from 'dayjs/plugin/timezone.js'
 import { ConnectionError, UnauthorizedError, NotAvailableError, NotFoundError } from '../errors.js'
 import { TURN_TYPES } from '../constants/registeredTurnsType.js'
+import { isCancellationAllowed } from '../utils/validation.js'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -102,7 +103,7 @@ export class TurnModel {
     }
   }
 
-  static generate ({ attentionSchedule, interval, deadline }) {
+  static async generate ({ attentionSchedule, interval, deadline }) {
     // Función que crea un array con todos los turnos y los devuelve
     // para posteriormente en otra función insertarlos en la bbdd
     const turns = []
@@ -133,6 +134,15 @@ export class TurnModel {
         }
       }
     })
+
+    // Array de días disponibles para guardarlo en la base de datos. Se guardan los días chequeados.
+    const settings = attentionSchedule
+      .filter(schedule => schedule.checked)
+      .map(schedule => ({
+        day: schedule.day,
+        timeSlots: schedule.timeSlots
+      }))
+    await this.saveCalendarSettings({ settings })
 
     return turns
   }
@@ -174,6 +184,36 @@ export class TurnModel {
 
     try {
       await pool.query(query, values)
+    } catch (error) {
+      throw new ConnectionError('Database is not available')
+    }
+  }
+
+  static async saveCalendarSettings ({ settings }) {
+    try {
+      await pool.query('TRUNCATE TABLE calendar_settings')
+
+      for (const item of settings) {
+        const { day, timeSlots } = item
+
+        const [firstSlot, secondSlot] = timeSlots
+
+        const query = `
+          INSERT INTO calendar_settings
+            (day, first_start_time, first_end_time, second_start_time, second_end_time)
+            VALUES ($1, $2, $3, $4, $5)
+        `
+
+        const values = [
+          day,
+          firstSlot.start,
+          firstSlot.end,
+          secondSlot ? secondSlot.start : null,
+          secondSlot ? secondSlot.end : null
+        ]
+
+        await pool.query(query, values)
+      }
     } catch (error) {
       throw new ConnectionError('Database is not available')
     }
@@ -255,7 +295,6 @@ export class TurnModel {
 
       return turnsWithLocalTime
     } catch (error) {
-      console.log(error)
       if (error instanceof NotFoundError) throw error
 
       throw new ConnectionError('Database is not available')
@@ -276,18 +315,25 @@ export class TurnModel {
 
       if (turn.rowCount === 0) throw new NotFoundError('Turn not found')
 
-      const turnDate = dayjs(turn.rows[0].date_time).utc()
-      const currentDate = dayjs().utc()
-      const diffHours = turnDate.diff(currentDate, 'hour')
+      if (!isCancellationAllowed(turn.rows[0])) throw new UnauthorizedError('You cannot cancel the turn because the time limit has been exceeded')
 
-      if (diffHours < 24) throw new UnauthorizedError('You cannot cancel the turn because the time limit has been exceeded')
+      const isInAvailableTimeSlots = await this.isInAvailableTimeSlots(turn.rows[0])
 
-      await pool.query(
-        `UPDATE turns SET available = true, user_id = null, service_id = null
-          WHERE id_turn = $1
-          AND user_id = $2;`,
-        [turnId, userId]
-      )
+      if (isInAvailableTimeSlots) {
+        await pool.query(
+          `UPDATE turns SET available = true, user_id = null, service_id = null
+            WHERE id_turn = $1
+            AND user_id = $2;`,
+          [turnId, userId]
+        )
+      } else {
+        await pool.query(
+          `DELETE FROM turns
+            WHERE id_turn = $1
+            AND user_id = $2`,
+          [turnId, userId]
+        )
+      }
 
       return {
         user: turn.rows[0].name,
@@ -301,5 +347,26 @@ export class TurnModel {
 
       throw new ConnectionError('Database is not available')
     }
+  }
+
+  static async isInAvailableTimeSlots (turn) {
+    const turnDay = dayjs(turn.date_time).tz('America/Argentina/Buenos_Aires').format('dddd').toLowerCase()
+    const turnTime = dayjs(turn.date_time).tz('America/Argentina/Buenos_Aires').format('HH:mm:ss')
+
+    const calendarSettings = await pool.query(
+      `SELECT day, first_start_time, first_end_time, second_start_time, second_end_time
+        FROM calendar_settings
+        WHERE LOWER(day) = $1`,
+      [turnDay]
+    )
+
+    if (calendarSettings.rowCount === 0) return false
+
+    const availableDays = calendarSettings.rows[0]
+
+    const isInFirstSlot = turnTime >= availableDays.first_start_time && turnTime <= availableDays.first_end_time
+    const isInSecondtSlot = availableDays.second_start_time && turnTime >= availableDays.second_start_time && turnTime <= availableDays.second_end_time
+
+    return isInFirstSlot || isInSecondtSlot
   }
 }
