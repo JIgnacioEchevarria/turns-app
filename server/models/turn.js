@@ -54,7 +54,7 @@ export class TurnModel {
 
   static async getTurnsByDate ({ date }) {
     const currentDate = dayjs().format('YYYY-MM-DD')
-    const timeLimit = dayjs().add(12, 'hour')
+    const timeLimit = dayjs().add(12, 'hour').format('YYYY-MM-DD HH:mm:ss-03')
 
     try {
       const turns = await pool.query(
