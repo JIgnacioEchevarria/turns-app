@@ -2,9 +2,9 @@ import { Router } from 'express'
 import { TurnController } from '../controllers/turn.js'
 import { isAdmin, isAdminOrEmployee, validateAccessToken } from '../utils/authorization.js'
 
-export const createTurnRouter = ({ turnModel }) => {
+export const createTurnRouter = ({ turnModel, userModel }) => {
   const turnsRouter = Router()
-  const turnController = new TurnController({ turnModel })
+  const turnController = new TurnController({ turnModel, userModel })
 
   /**
    * @swagger
@@ -797,6 +797,297 @@ export const createTurnRouter = ({ turnModel }) => {
    *                    example: "Database is not available"
   */
   turnsRouter.patch('/:id/status', validateAccessToken, turnController.cancel)
+
+  /**
+   * @swagger
+   *  /api/v1/turns/{id}/unavailable:
+   *    patch:
+   *      summary: Mark turn as unavailable
+   *      tags: [Turn]
+   *      security:
+   *        - cookieAuth: []
+   *      parameters:
+   *        - in: path
+   *          name: id
+   *          required: true
+   *          schema:
+   *            type: string
+   *            format: uuid
+   *            example:  "ed205999-b6ea-417b-8bfc-a3eb9a603b1a"
+   *          description: Unique ID of the turn to mark as unavailable
+   *      responses:
+   *        200:
+   *          description: Turn successfully marked as unavailable
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 200
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Success"
+   *        403:
+   *          description: Access not authorized
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 403
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Access Not Authorized"
+   *        400:
+   *          description: Bad Request
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 400
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Bad Request"
+   *                  error:
+   *                    type: string
+   *                    example: "Invalid turn ID provided"
+   *        404:
+   *          description: Turn not found
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 404
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Not Found"
+   *                  error:
+   *                    type: string
+   *                    example: "Turn not found"
+   *        500:
+   *          description: Failed Connection
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 500
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Failed Connection"
+   *                  error:
+   *                    type: string
+   *                    example: "Database is not available"
+  */
+  turnsRouter.patch('/:id/unavailable', validateAccessToken, isAdminOrEmployee, turnController.markAsUnavailable)
+
+  /**
+   * @swagger
+   *  /api/v1/turns/manual:
+   *    patch:
+   *      summary: Request turn manually
+   *      tags: [Turn]
+   *      security:
+   *        - cookieAuth: []
+   *      parameters:
+   *        - in: query
+   *          name: turnId
+   *          required: true
+   *          schema:
+   *            type: string
+   *            format: uuid
+   *            example: "ed205999-b6ea-417b-8bfc-a3eb9a603b1a"
+   *          description: Unique ID of turn
+   *        - in: query
+   *          name: idService
+   *          required: true
+   *          schema:
+   *            type: string
+   *            format: uuid
+   *            example: "ed205999-b6ea-417b-8bfc-a3eb9a603b1a"
+   *          description: Unique ID of service
+   *      requestBody:
+   *        required: true
+   *        content:
+   *          application/json:
+   *            schema:
+   *              type: object
+   *              properties:
+   *                name:
+   *                  type: string
+   *                email:
+   *                  type: string
+   *                  format: email
+   *                phoneNum:
+   *                  type: string
+   *                  minLength: 9
+   *                  maxLength: 11
+   *              required:
+   *                - name
+   *                - phoneNum
+   *              example:
+   *                name: "jhonDutch"
+   *                email: "jdutchrd2@example.com"
+   *                phoneNum: "2389092370"
+   *      responses:
+   *        200:
+   *          description: Turn requested successfully
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 200
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Success"
+   *                  data:
+   *                    type: object
+   *                    properties:
+   *                      date_time:
+   *                        type: string
+   *                        format: date-time
+   *                        example: "2024-08-12 05:00:00"
+   *                      date:
+   *                        type: string
+   *                        format: date
+   *                        example: "2024-08-12"
+   *                      time:
+   *                        type: string
+   *                        format: time
+   *                        example: "05:00:00"
+   *                      id_turn:
+   *                        type: string
+   *                        format: uuid
+   *                        example: "ed205999-b6ea-417b-8bfc-a3eb9a603b1a"
+   *                      id_user:
+   *                        type: string
+   *                        format: uuid
+   *                        example: "ed208811-b6ea-417b-8bfc-a3eb9a603b1a"
+   *                      id_service:
+   *                        type: string
+   *                        format: uuid
+   *                        example: "ed202000-b6ea-417b-8bfc-a3eb9a603b1a"
+   *                      email:
+   *                        type: string
+   *                        format: email
+   *                        example: "jDutch@example.com"
+   *                      name:
+   *                        type: string
+   *                        example: "jhonDutch"
+   *                      phoneNumber:
+   *                        type: string
+   *                        example: "2349089078"
+   *                      service:
+   *                        type: string
+   *                        example: "Haircut"
+   *                      duration:
+   *                        type: integer
+   *                        example: 30
+   *                      price:
+   *                        type: integer
+   *                        example: 2000
+   *        403:
+   *          description: Access not authorized
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 403
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Access Not Authorized"
+   *        422:
+   *          description: Validation error
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 422
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Validation Error"
+   *                  error:
+   *                    type: array
+   *                    items:
+   *                      type: object
+   *                      properties:
+   *                        field:
+   *                          type: string
+   *                          example: "name"
+   *                        message:
+   *                          type: string
+   *                          example: "name must be a string"
+   *        400:
+   *          description: Bad Request
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 400
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Bad Request"
+   *                  error:
+   *                    type: string
+   *                    example: "Invalid turn ID provided"
+   *        404:
+   *          description: Turn not available
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 404
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Not Available"
+   *                  error:
+   *                    type: string
+   *                    example: "Turn not available"
+   *        500:
+   *          description: Failed Connection
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: integer
+   *                    example: 500
+   *                  statusMessage:
+   *                    type: string
+   *                    example: "Failed Connection"
+   *                  error:
+   *                    type: string
+   *                    example: "Database is not available"
+  */
+  turnsRouter.patch('/manual', validateAccessToken, isAdminOrEmployee, turnController.requestManually)
 
   return turnsRouter
 }

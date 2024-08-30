@@ -54,7 +54,7 @@ export const ModalTurn = ({ info, handleToggleModalTurn }) => {
                   <li><span>Duración:</span> {turnDuration(info.service.duration)}</li>
                   <li><span>Valor:</span> ${info.service.price}</li>
                 </ul>
-                <button className="modal-turn-req-btn" onClick={() => handleRequestTurn()}>Reservar</button>
+                <button className="modal-turn-primary-btn" onClick={() => handleRequestTurn()}>Reservar</button>
               </div>
               </>
           }

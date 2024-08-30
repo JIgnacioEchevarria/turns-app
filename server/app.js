@@ -23,7 +23,7 @@ app.disable('x-powered-by')
 setupSwagger(app)
 
 // Rutas de la API
-app.use('/api/v1/turns', createTurnRouter({ turnModel: TurnModel }))
+app.use('/api/v1/turns', createTurnRouter({ turnModel: TurnModel, userModel: UserModel }))
 app.use('/api/v1/services', createServiceRouter({ serviceModel: ServiceModel }))
 app.use('/api/v1/users', createUserRouter({ userModel: UserModel }))
 

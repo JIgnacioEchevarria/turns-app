@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat.js'
 import { ConnectionError, UnauthorizedError, NotAvailableError, NotFoundError } from '../errors.js'
-import { validateCalendar } from '../schemes/schemes.js'
+import { validateCalendar, validatePartialUser } from '../schemes/schemes.js'
 import { isValidTurnsType, isValidUuid } from '../utils/validation.js'
 import { transporter } from '../utils/mailer.js'
 import { parseDuration } from '../utils/turnUtils.js'
@@ -9,8 +9,9 @@ import { parseDuration } from '../utils/turnUtils.js'
 dayjs.extend(customParseFormat)
 
 export class TurnController {
-  constructor ({ turnModel }) {
+  constructor ({ turnModel, userModel }) {
     this.turnModel = turnModel
+    this.userModel = userModel
   }
 
   getAll = async (req, res) => {
@@ -175,6 +176,41 @@ export class TurnController {
     }
   }
 
+  requestManually = async (req, res) => {
+    try {
+      const { turnId, serviceId } = req.query
+      const result = validatePartialUser(req.body)
+
+      if (!result.success) {
+        return res.status(422).json({
+          status: 422,
+          statusMessage: 'Validation Error',
+          error: result.error.errors.map(e => ({
+            field: e.path[0],
+            message: e.message
+          }))
+        })
+      }
+
+      const userId = await this.userModel.createGuestUser({ info: result.data })
+
+      if (!isValidUuid(turnId)) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'Invalid turn ID provided' })
+      if (!isValidUuid(serviceId)) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'Invalid service ID provided' })
+
+      const turn = await this.turnModel.requestManually({ turnId, serviceId, userId })
+
+      return res.status(200).json({ status: 200, statusMessage: 'Success', data: turn })
+    } catch (error) {
+      if (error instanceof NotAvailableError) {
+        return res.status(404).json({ status: 404, statusMessage: 'Not Available', error: error.message })
+      }
+
+      if (error instanceof ConnectionError) {
+        return res.status(500).json({ status: 500, statusMessage: 'Failed Connection', error: error.message })
+      }
+    }
+  }
+
   getUserTurns = async (req, res) => {
     try {
       const userId = req.user.id
@@ -228,6 +264,26 @@ export class TurnController {
 
       if (error instanceof UnauthorizedError) {
         return res.status(401).json({ status: 401, statusMessage: 'Unauthorized', error: error.message })
+      }
+
+      if (error instanceof ConnectionError) {
+        return res.status(500).json({ status: 500, statusMessage: 'Failed Connection', error: error.message })
+      }
+    }
+  }
+
+  markAsUnavailable = async (req, res) => {
+    try {
+      const id = req.params.id
+
+      if (!isValidUuid(id)) return res.status(400).json({ status: 400, statusMessage: 'Bad Request', error: 'Invalid turn ID provided' })
+
+      await this.turnModel.markAsUnavailable({ id })
+
+      return res.status(200).json({ status: 200, statusMessage: 'Success' })
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        return res.status(404).json({ status: 404, statusMessage: 'Not Found', error: error.message })
       }
 
       if (error instanceof ConnectionError) {

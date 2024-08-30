@@ -41,6 +41,7 @@
     font-size: 1.5rem;
     cursor: pointer;
     transition: background .3s ease-out;
+    position: relative;
 }
 
 .turntime-card:hover {
@@ -54,6 +55,10 @@
 
 .turntime-card-selected:hover {
     background: #3082a2;
+}
+
+.turntime-card-cancel {
+    color: #991B1B;
 }
 
 .available-turns-list {
@@ -89,7 +94,7 @@
     font-weight: 700;
 }
 
-.container-popup {
+.container-popup, .container-popup-annularturn {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -101,7 +106,7 @@
     z-index: 5;
 }
 
-.popup {
+.popup, .popup-annularturn {
     background: #F3F3F3;
     padding: 2vh;
     border-radius: .5rem;
@@ -148,12 +153,48 @@
     text-align: center;
 }
 
-.req-turn-btn {
-    width: 40vh;
-    max-width: 90%;
+.popup-annularturn-buttons {
+    display: flex;
+    justify-content: right;
+    width: 100%;
+    gap: 1rem;
+}
+
+.popup-annularturn-buttons button {
+    padding: .5rem 1rem;
+    font-size: .8rem;
+    cursor: pointer;
+    border: 0;
+    font-weight: 700;
+}
+
+.popup-annularturn-primarybtn {
+    background: #3ea5ce;
+    color: #FFFFFF;
+    border-radius: .2rem;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
+}
+
+.popup-annularturn-secondarybtn {
+    color: #3ea5ce;
+}
+
+.req-turn-buttons {
     position: sticky;
     bottom: 3rem;
-    padding: 1rem 0;
+    display: flex;
+    gap: 1rem;
+    z-index: 3;
+}
+
+@media (max-width: 600px)  {
+    .req-turn-buttons {
+        flex-direction: column;
+    }
+}
+
+.req-turn-btn {
+    padding: 1rem 1.5rem;
     border: 0;
     border-radius: .2rem;
     background: #3483FA;
@@ -161,9 +202,7 @@
     font-size: 2rem;
     font-weight: 700;
     cursor: pointer;
-    z-index: 3;
     transition: background .2s ease-out;
-    animation: fade-in 1.5s ease infinite;
     box-shadow: 0 10px 20px rgba(0, 0, 0, .5);
 }
 
@@ -171,16 +210,21 @@
     background: #2277f7;
 }
 
-@keyframes fade-in {
-    0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-    }
-    40% {
-        transform: translateY(-30px);
-    }
-    60% {
-        transform: translateY(-15px);
-    }
+.reqmanual-turn-btn {
+    padding: 1rem 1.5rem;
+    border: 0;
+    border-radius: .2rem;
+    background: #F3F3F3;
+    color: #3483FA;
+    font-size: 2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .2s ease-out;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, .5);
+}
+
+.reqmanual-turn-btn:hover {
+    background: rgb(220, 220, 220);
 }
 
 .backdrop-modal-turn {
@@ -249,7 +293,7 @@
     font-weight: 700;
 }
 
-.modal-turn-req-btn {
+.modal-turn-primary-btn {
     padding: 1rem 0;
     border: 0;
     border-radius: .2rem;
@@ -293,4 +337,10 @@
 .confirmation-turn-btn-secondary {
     background: transparent;
     color: #3ea5ce;
+}
+
+.modal-turn-formclient {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }

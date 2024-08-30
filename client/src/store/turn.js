@@ -151,6 +151,55 @@ export const useTurnStore = create()(persist((set, get) => {
       } finally {
         set({ isLoading: false })
       }
+    },
+
+    annularTurn: async (id) => {
+      set({ isLoading: true, turnError: null })
+      try {
+        const res = await fetch(`${URL}/api/v1/turns/${id}/unavailable`, {
+          method: 'PATCH',
+          credentials: 'include'
+        })
+        const data = await res.json()
+
+        if (res.ok) {
+          set({ turnError: null })
+          return data.status
+        } else {
+          set({ turnError: data })
+          return data.status
+        }
+      } catch (error) {
+        set({ turnError: 'Error when canceling turn' })
+      } finally {
+        set({ isLoading: false })
+      }
+    },
+
+    requestTurnManually: async (info) => {
+      set({ isLoading: true, turnError: null })
+      try {
+        const res = await fetch(`${URL}/api/v1/turns/manual?turnId=${info.turn}&serviceId=${info.service}`, {
+          method: 'PATCH',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(info.client)
+        })
+        const data = await res.json()
+        if (res.ok) {
+          set({ turnError: null })
+          return data.status
+        } else {
+          set({ turnError: data })
+          return data.status
+        }
+      } catch (error) {
+        set({ turnError: 'Error when requesting an turn' })
+      } finally {
+        set({ isLoading: false })
+      }
     }
   }
 }, {

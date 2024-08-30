@@ -8,7 +8,8 @@ export class UserModel {
     try {
       const users = await pool.query(
         `SELECT id_user AS id, name, email, phone_number, role
-          FROM users;`
+          FROM users
+          WHERE guest = false;`
       )
 
       if (users.rows.length === 0) throw new NotFoundError('No users found')
@@ -26,7 +27,8 @@ export class UserModel {
       const users = await pool.query(
         `SELECT id_user AS id, name, email, phone_number, role
           FROM users
-          WHERE id_user = $1;`,
+          WHERE id_user = $1
+          AND guest = false;`,
         [id]
       )
 
@@ -47,14 +49,16 @@ export class UserModel {
       const nameVerification = await pool.query(
         `SELECT *
           FROM users
-          WHERE name = $1;`,
+          WHERE name = $1
+          AND guest = false;`,
         [name]
       )
 
       const emailVerification = await pool.query(
         `SELECT *
           FROM users
-          WHERE email = $1;`,
+          WHERE email = $1
+          AND guest = false;`,
         [email]
       )
 
@@ -75,12 +79,30 @@ export class UserModel {
     }
   }
 
+  static async createGuestUser ({ info }) {
+    const { name, email, phoneNum } = info
+
+    try {
+      const newGuestUserId = await pool.query(
+        `INSERT INTO users (name, email, phone_number, guest)
+          VALUES ($1, $2, $3, TRUE)
+          RETURNING id_user;`,
+        [name, email, phoneNum]
+      )
+
+      return newGuestUserId.rows[0].id_user
+    } catch (error) {
+      throw new ConnectionError('Database is not available')
+    }
+  }
+
   static async login ({ email, password }) {
     try {
       const users = await pool.query(
         `SELECT id_user, name, email, password, phone_number, role
           FROM users
-          WHERE email = $1;`,
+          WHERE email = $1
+          AND guest = false;`,
         [email]
       )
 
@@ -116,7 +138,8 @@ export class UserModel {
       const users = await pool.query(
         `SELECT *
           FROM users
-          WHERE id_user = $1;`,
+          WHERE id_user = $1
+          AND guest = false;`,
         [id]
       )
 
@@ -128,7 +151,8 @@ export class UserModel {
         `SELECT *
           FROM users
           WHERE name = $1
-          AND id_user != $2;`,
+          AND id_user != $2
+          AND guest = false;`,
         [name, id]
       )
 
@@ -157,7 +181,8 @@ export class UserModel {
       const updatedUser = await pool.query(
         `SELECT id_user, name, email, phone_number, role
           FROM users
-          WHERE id_user = $1;`,
+          WHERE id_user = $1
+          AND guest = false;`,
         [id]
       )
 
@@ -184,7 +209,8 @@ export class UserModel {
       const users = await pool.query(
         `SELECT id_user, name, email, password, phone_number, role
           FROM users
-          WHERE id_user = $1;`,
+          WHERE id_user = $1
+          AND guest = false;`,
         [id]
       )
 
@@ -214,7 +240,8 @@ export class UserModel {
       const users = await pool.query(
         `SELECT id_user, name, email, phone_number, role
           FROM users
-          WHERE id_user = $1`,
+          WHERE id_user = $1
+          AND guest = false;`,
         [id]
       )
 

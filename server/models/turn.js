@@ -54,7 +54,7 @@ export class TurnModel {
 
   static async getTurnsByDate ({ date }) {
     const currentDate = dayjs().format('YYYY-MM-DD')
-    const timeLimit = dayjs().utc().add(12, 'hour').second(0).millisecond(0).format('YYYY-MM-DD HH:mm:ss')
+    const timeLimit = dayjs().add(12, 'hour')
 
     try {
       const turns = await pool.query(
@@ -272,6 +272,57 @@ export class TurnModel {
     }
   }
 
+  static async requestManually ({ turnId, serviceId, userId }) {
+    const currentDate = dayjs().format('YYYY-MM-DD')
+    const timeLimit = dayjs().utc().add(12, 'hour').second(0).millisecond(0).format('YYYY-MM-DD HH:mm:ss')
+
+    try {
+      const turn = await pool.query(
+        `SELECT *
+          FROM turns
+          WHERE id_turn = $1
+          AND available = true
+          AND DATE(date_time) > DATE($2)
+          AND date_time >= $3;`,
+        [turnId, currentDate, timeLimit]
+      )
+
+      if (turn.rowCount === 0) throw new NotAvailableError('Turn not available')
+
+      await pool.query(
+        `UPDATE turns SET available = false, user_id = $1, service_id = $2 
+          WHERE id_turn = $3;`,
+        [userId, serviceId, turnId]
+      )
+
+      const newTurn = await pool.query(
+        `SELECT t.id_turn, u.id_user, s.id_service, t.date_time, u.email, u.name, u.phone_number, s.name service, s.duration, s.price
+          FROM turns t
+          INNER JOIN services s ON t.service_id = s.id_service
+          INNER JOIN users u ON t.user_id = u.id_user
+          WHERE t.id_turn = $1;`,
+        [turnId]
+      )
+
+      return {
+        date_time: dayjs(newTurn.rows[0].date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss'),
+        date: dayjs(newTurn.rows[0].date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD'),
+        time: dayjs(newTurn.rows[0].date_time).tz('America/Argentina/Buenos_Aires').format('HH:mm'),
+        id_turn: newTurn.rows[0].id_turn,
+        id_user: newTurn.rows[0].id_user,
+        id_service: newTurn.rows[0].id_service,
+        email: newTurn.rows[0].email,
+        name: newTurn.rows[0].name,
+        phoneNumber: newTurn.rows[0].phone_number,
+        service: newTurn.rows[0].service,
+        duration: newTurn.rows[0].duration,
+        price: newTurn.rows[0].price
+      }
+    } catch (error) {
+      throw new ConnectionError('Database is not available')
+    }
+  }
+
   static async getUserTurns ({ userId }) {
     try {
       const turns = await pool.query(
@@ -368,5 +419,25 @@ export class TurnModel {
     const isInSecondtSlot = availableDays.second_start_time && turnTime >= availableDays.second_start_time && turnTime <= availableDays.second_end_time
 
     return isInFirstSlot || isInSecondtSlot
+  }
+
+  static async markAsUnavailable ({ id }) {
+    try {
+      const turn = await pool.query(
+        `SELECT id_turn, date_time
+          FROM turns
+          WHERE id_turn = $1
+          AND available = true;`,
+        [id]
+      )
+
+      if (turn.rowCount === 0) throw new NotFoundError('Turn not found')
+
+      await pool.query('UPDATE turns SET available = false WHERE id_turn = $1 AND available = true', [id])
+    } catch (error) {
+      if (error instanceof NotFoundError) throw error
+
+      throw new ConnectionError('Database is not available')
+    }
   }
 }

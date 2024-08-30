@@ -18,8 +18,8 @@ Puedes probar la aplicación en vivo aquí: [Sistema de Gestión de Turnos - Dem
 Para explorar la aplicación desde diferentes perspectivas, usa laas siguientes credenciales de prueba:
 
 #### Cliente
-- **Email**: cliente@example.com
-- **Contraseña**: cliente123
+- **Email**: client@example.com
+- **Contraseña**: client123
 
 ### Empleado
 - **Email**: employee@example.com

@@ -38,6 +38,9 @@ export const createUserRouter = ({ userModel }) => {
    *        role:
    *          type: string
    *          default: "client"
+   *        guest:
+   *          type: boolean
+   *          default: false
    *      required:
    *        - name
    *        - email
@@ -50,6 +53,7 @@ export const createUserRouter = ({ userModel }) => {
    *        password: "password123"
    *        phone_number: "2678902345"
    *        role: "client"
+   *        guest: false
   */
 
   /**
