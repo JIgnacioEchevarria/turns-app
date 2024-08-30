@@ -54,7 +54,6 @@ export class TurnModel {
 
   static async getTurnsByDate ({ date }) {
     const currentDate = dayjs().format('YYYY-MM-DD')
-    const timeLimit = dayjs().add(12, 'hour').format('YYYY-MM-DD HH:mm:ss-03')
 
     try {
       const turns = await pool.query(
@@ -63,9 +62,8 @@ export class TurnModel {
           WHERE available = true
           AND DATE(date_time) = DATE($1)
           AND DATE(date_time) > DATE($2)
-          AND date_time >= $3
           ORDER BY date_time;`,
-        [date, currentDate, timeLimit]
+        [date, currentDate]
       )
 
       if (turns.rowCount === 0) throw new NotAvailableError('There are no turns available for the selected day')
@@ -221,7 +219,6 @@ export class TurnModel {
 
   static async request ({ turnId, userId, serviceId }) {
     const currentDate = dayjs().format('YYYY-MM-DD')
-    const timeLimit = dayjs().utc().add(12, 'hour').second(0).millisecond(0).format('YYYY-MM-DD HH:mm:ss')
 
     try {
       const turns = await pool.query(
@@ -229,9 +226,8 @@ export class TurnModel {
           FROM turns
           WHERE id_turn = $1
           AND available = true
-          AND DATE(date_time) > DATE($2)
-          AND date_time >= $3;`,
-        [turnId, currentDate, timeLimit]
+          AND DATE(date_time) > DATE($2);`,
+        [turnId, currentDate]
       )
 
       if (turns.rowCount === 0) throw new NotAvailableError('Turn not available')
