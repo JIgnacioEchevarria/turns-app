@@ -270,7 +270,6 @@ export class TurnModel {
 
   static async requestManually ({ turnId, serviceId, userId }) {
     const currentDate = dayjs().format('YYYY-MM-DD')
-    const timeLimit = dayjs().utc().add(12, 'hour').second(0).millisecond(0).format('YYYY-MM-DD HH:mm:ss')
 
     try {
       const turn = await pool.query(
@@ -278,9 +277,8 @@ export class TurnModel {
           FROM turns
           WHERE id_turn = $1
           AND available = true
-          AND DATE(date_time) > DATE($2)
-          AND date_time >= $3;`,
-        [turnId, currentDate, timeLimit]
+          AND DATE(date_time) > DATE($2);`,
+        [turnId, currentDate]
       )
 
       if (turn.rowCount === 0) throw new NotAvailableError('Turn not available')
