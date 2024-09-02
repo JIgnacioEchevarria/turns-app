@@ -40,7 +40,7 @@ export class TurnModel {
       const turnsWithLocalTime = turns.rows.map(turn => ({
         ...turn,
         date_time: dayjs(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss'),
-        date: dayjs(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD'),
+        date: dayjs(turn.date_time).tz('America/Argentina/Buenos_Aires').format('DD-MM-YYYY'),
         time: dayjs(turn.date_time).tz('America/Argentina/Buenos_Aires').format('HH:mm')
       }))
 
@@ -71,7 +71,7 @@ export class TurnModel {
       const turnsWithLocalTime = turns.rows.map(turn => ({
         ...turn,
         date_time: dayjs(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss'),
-        date: dayjs(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD'),
+        date: dayjs(turn.date_time).tz('America/Argentina/Buenos_Aires').format('DD-MM-YYYY'),
         time: dayjs(turn.date_time).tz('America/Argentina/Buenos_Aires').format('HH:mm')
       }))
 
@@ -334,7 +334,7 @@ export class TurnModel {
       const turnsWithLocalTime = turns.rows.map(turn => ({
         ...turn,
         date_time: dayjs(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD HH:mm:ss'),
-        date: dayjs(turn.date_time).tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD'),
+        date: dayjs(turn.date_time).tz('America/Argentina/Buenos_Aires').format('DD-MM-YYYY'),
         time: dayjs(turn.date_time).tz('America/Argentina/Buenos_Aires').format('HH:mm')
       }))
 
