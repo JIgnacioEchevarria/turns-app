@@ -44,11 +44,13 @@ Para explorar la aplicación desde diferentes perspectivas, usa laas siguientes 
 - **Modificar Información de Perfil**: Tanto clientes como administadores tienen la posibilidad de modificar su información (Contraseña, Nombre de usuario, Teléfono).
 - **Visualizar reservas**: Los usuarios pueden ver sus reservas y cancelarlas si es posible.
 
-### Funcionalidades de Administración:
+### Funcionalidades de Administración y Empleados:
 - **Gestión de usuarios**: Los administradores pueden visualizar todos los usuarios de la aplicación y tienen la posibilidad de asignarle otro rol.
-- **Configuración de servicios**: Los administradores pueden visualizar, agregar, editar y eliminar los servicios disponibles de la aplicación.
+- **Configuración de servicios**: Los administradores y empleados pueden visualizar, agregar, editar y eliminar los servicios disponibles de la aplicación.
 - **Configuración de Calendario**: Los administradores pueden ajustar los horarios de disponibilidad para los turnos, establecer la duración de cada uno, y definir hasta qué fecha es válida esta configuración.
-- **Visualizar Reservas de Clientes**: Los administradores pueden visualizar las reservas de todos los usuarios por fecha para organizarse.
+- **Visualizar Reservas de Clientes**: Los administradores y empleados pueden visualizar las reservas de todos los usuarios por fecha para organizarse.
+- **Dar de baja un Turno**: Los administradores y empleados pueden quitar turnos del calendario que no han sido solicitados hasta el momento.
+- **Registrar turno a cliente**: Administradores y empledaos pueden registrar un turno para un cliente que solicito un turno de manera presencial.
 
 ### Otros
 - **Interfaz Responsive**: Diseño adaptable para garantizar una buena experiencia en dispositivos móviles y de escritorio.
