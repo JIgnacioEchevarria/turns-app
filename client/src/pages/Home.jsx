@@ -120,8 +120,8 @@ export const HomePage = () => {
             />
           ))}
         </div>
-        {selectedOptions && selectedOptions.service && selectedOptions.turn && userInfo && (
-          (userInfo.role === ROLES.ADMIN || userInfo.role === ROLES.EMPLOYEE)
+        {selectedOptions && selectedOptions.service && selectedOptions.turn && (
+          (userInfo && (userInfo.role === ROLES.ADMIN || userInfo.role === ROLES.EMPLOYEE))
             ? (
                 <div className='req-turn-buttons'>
                   <button onClick={handleToggleModalTurn} className='req-turn-btn'>Reservar turno</button>
