@@ -150,14 +150,14 @@ export class TurnController {
         Hora: ${turn.time}
       `
 
-      await transporter.sendMail({
+      transporter.sendMail({
         from: `"JIE Turnos" <${process.env.OUT_EMAIL}>`,
         to: process.env.OUT_EMAIL,
         subject: `${turn.name} ha solicitado un turno`,
         text: `Se ha solicitado un turno con la siguiente información:\n\n${turnInfoAdmin}`
       }).catch(() => {})
 
-      await transporter.sendMail({
+      transporter.sendMail({
         from: `"JIE Turnos" <${process.env.OUT_EMAIL}>`,
         to: turn.email,
         subject: 'Gracias por solicitar un turno en JIE',
@@ -248,7 +248,7 @@ export class TurnController {
         Hora: ${turnRemoved.time}
       `
 
-      await transporter.sendMail({
+      transporter.sendMail({
         from: `"JIE Turnos" <${process.env.OUT_EMAIL}>`,
         to: process.env.OUT_EMAIL,
         subject: `${turnRemoved.user} ha cancelado su turno`,

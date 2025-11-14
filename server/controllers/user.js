@@ -8,7 +8,6 @@ export class UserController {
     this.userModel = userModel
   }
 
-  // Obtener todos los usuarios
   getAll = async (req, res) => {
     try {
       const users = await this.userModel.getAll()
@@ -25,7 +24,6 @@ export class UserController {
     }
   }
 
-  // Obtener un usuario por id
   getById = async (req, res) => {
     try {
       const id = req.user.id
@@ -45,7 +43,6 @@ export class UserController {
     }
   }
 
-  // Registro de usuario
   create = async (req, res) => {
     try {
       const result = validateUser(req.body)
@@ -69,7 +66,7 @@ export class UserController {
 
       await this.userModel.create({ info: { name, email, password, phoneNum } })
 
-      await transporter.sendMail({
+      transporter.sendMail({
         from: `"JIE Turnos" <${process.env.OUT_EMAIL}>`,
         to: email,
         subject: 'Gracias por crear una cuenta en JIE Turnos',
@@ -88,7 +85,6 @@ export class UserController {
     }
   }
 
-  // Inicio de sesión
   login = async (req, res) => {
     try {
       const result = validatePartialUser(req.body)
@@ -123,7 +119,6 @@ export class UserController {
     }
   }
 
-  // Cerrar sesión
   logout = (req, res) => {
     res.clearCookie('access_token', {
       httpOnly: true,
@@ -135,7 +130,6 @@ export class UserController {
     return res.status(200).json({ status: 200, statusMessage: 'Success' })
   }
 
-  // Edición del perfil
   update = async (req, res) => {
     try {
       const result = validatePartialUser(req.body)
@@ -173,7 +167,6 @@ export class UserController {
     }
   }
 
-  // Editar contraseña.
   editPassword = async (req, res) => {
     try {
       const result = validatePassword(req.body)
